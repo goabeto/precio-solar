@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Image from "next/image";
 import SolarCalculator from "@/components/SolarCalculator";
 import ResultsPanel from "@/components/ResultsPanel";
 import FinancingStep from "@/components/FinancingStep";
@@ -9,23 +10,28 @@ import InstallerResults from "@/components/InstallerResults";
 import type { InstallerDetail } from "@/components/InstallerResults";
 import CaseRegistration from "@/components/CaseRegistration";
 import ChatDashboard from "@/components/ChatDashboard";
-import FeatureCard from "@/components/FeatureCard";
 import type { CalculationResult, LoanProductInfo } from "@/components/SolarCalculator";
 import { useTranslation } from "@/i18n/useTranslation";
 
 type Step = "calculator" | "results" | "financing" | "financing-request" | "installers" | "register" | "chat";
 
-const STEP_KEYS: Record<Step, string> = {
-  calculator: "steps.calculate",
-  results: "steps.yourPrice",
-  financing: "steps.financing",
-  "financing-request": "steps.financingRequest",
-  installers: "steps.installers",
-  register: "steps.request",
-  chat: "steps.conversations",
-};
-
 const STEPS: Step[] = ["calculator", "results", "financing", "financing-request", "installers", "register", "chat"];
+
+// ── City images (shared with tuenergiaverde.es) ─────────────────
+const CITIES = [
+  { name: "Madrid", img: "/cities/madrid.jpg", installers: 104 },
+  { name: "Barcelona", img: "/cities/barcelona.jpg", installers: 46 },
+  { name: "Zaragoza", img: "/cities/zaragoza.jpg", installers: 72 },
+  { name: "Sevilla", img: "/cities/sevilla.jpg", installers: 34 },
+  { name: "Valencia", img: "/cities/valencia.jpg", installers: 29 },
+  { name: "Malaga", img: "/cities/malaga.jpg", installers: 38 },
+  { name: "Murcia", img: "/cities/murcia.jpg", installers: 44 },
+  { name: "Bilbao", img: "/cities/bilbao.jpg", installers: 12 },
+  { name: "Granada", img: "/cities/granada.jpg", installers: 28 },
+  { name: "Cordoba", img: "/cities/cordoba.jpg", installers: 38 },
+  { name: "Palma de Mallorca", img: "/cities/palma-de-mallorca.jpg", installers: 33 },
+  { name: "Alicante", img: "/cities/alicante.jpg", installers: 22 },
+];
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -52,38 +58,95 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ── Hero (calculator step only) ─────────────────────────────── */}
+      {/* ══════════════════════════════════════════════════════════════
+          HERO — Background image + embedded calculator (calculator step)
+          ══════════════════════════════════════════════════════════════ */}
       {step === "calculator" && (
-        <section className="relative py-16 sm:py-24 text-center px-4 bg-gradient-to-br from-secondary-container/20 via-background to-primary-container/10">
-          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-foreground max-w-2xl mx-auto leading-tight">
-            {t("hero.title")}{" "}
-            <span className="text-primary underline decoration-primary/30 underline-offset-4">
-              {t("hero.titleHighlight")}
-            </span>{" "}
-            {t("hero.titleEnd")}
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
-            {t("hero.subtitle")}
-          </p>
-
-          {/* Inline value badges */}
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <span className="inline-flex items-center gap-1 bg-card border border-border rounded-full px-3 py-1 text-sm text-muted-foreground shadow-sm">
-              &#10003; {t("home.badgeFree")}
-            </span>
-            <span className="inline-flex items-center gap-1 bg-card border border-border rounded-full px-3 py-1 text-sm text-muted-foreground shadow-sm">
-              &#9201; {t("home.badge2Min")}
-            </span>
-            <span className="inline-flex items-center gap-1 bg-card border border-border rounded-full px-3 py-1 text-sm text-muted-foreground shadow-sm">
-              &#128274; {t("home.badgeNoCommitment")}
-            </span>
+        <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#0a3d1a] via-[#145428] to-[#1a6830]">
+          {/* Background image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/hero-solar.jpg"
+              alt="Modern home with solar panels"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a3d1a]/90 via-[#0a3d1a]/70 to-[#0a3d1a]/40" />
           </div>
+
+          {/* Content */}
+          <div className="relative z-10 w-full pt-16 sm:pt-20 pb-24 sm:pb-28 px-4 sm:px-6">
+            <div className="max-w-6xl mx-auto">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/80 text-sm font-medium mb-6">
+                <span className="w-2 h-2 rounded-full bg-[#facc15] animate-pulse" />
+                {t("home.badgeFree")} &middot; {t("home.badge2Min")} &middot; {t("home.badgeNoCommitment")}
+              </div>
+
+              <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+                {/* Left — Text + Stats */}
+                <div className="lg:col-span-3">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white mb-5 leading-[1.1] tracking-tight">
+                    {t("hero.title")}{" "}
+                    <span className="text-[#facc15]">{t("hero.titleHighlight")}</span>{" "}
+                    {t("hero.titleEnd")}
+                  </h1>
+                  <p className="text-white/80 text-base sm:text-lg max-w-xl mb-8 leading-relaxed">
+                    {t("hero.subtitle")}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-4 mb-8">
+                    <a href="/comparar-financiacion" className="text-white/70 hover:text-white font-medium transition-colors text-sm underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
+                      {t("home.toolFinancingTitle")}
+                    </a>
+                    <a href="/revisar-propuesta" className="text-white/70 hover:text-white font-medium transition-colors text-sm underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
+                      {t("home.toolReviewTitle")}
+                    </a>
+                    <a href="/guias" className="text-white/70 hover:text-white font-medium transition-colors text-sm underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
+                      {t("nav.guides")}
+                    </a>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="flex items-center gap-8 pt-6 border-t border-white/10">
+                    <div>
+                      <p className="text-xl sm:text-2xl font-extrabold text-white">500+</p>
+                      <p className="text-xs sm:text-sm text-white/60">{t("home.statInstallers")}</p>
+                    </div>
+                    <div>
+                      <p className="text-xl sm:text-2xl font-extrabold text-white">17</p>
+                      <p className="text-xs sm:text-sm text-white/60">{t("home.statRegions")}</p>
+                    </div>
+                    <div>
+                      <p className="text-xl sm:text-2xl font-extrabold text-white">13+</p>
+                      <p className="text-xs sm:text-sm text-white/60">{t("home.statProviders")}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right — Calculator card */}
+                <div className="lg:col-span-2">
+                  <div className="bg-white/10 backdrop-blur-xl p-1 rounded-2xl shadow-2xl relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/0 pointer-events-none rounded-2xl" />
+                    <div className="relative z-10 bg-white rounded-xl p-4 sm:p-5">
+                      <SolarCalculator onResult={handleResult} compact />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom gradient fade */}
+          <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
         </section>
       )}
 
-      {/* ── Progress bar (flow steps) ───────────────────────────────── */}
+      {/* ══════════════════════════════════════════════════════════════
+          PROGRESS BAR (flow steps, after calculator)
+          ══════════════════════════════════════════════════════════════ */}
       {step !== "calculator" && (() => {
-        // Visual steps collapse financing + financing-request into one
         const VISUAL_STEPS: { key: string; label: string; covers: Step[] }[] = [
           { key: "results", label: "steps.yourPrice", covers: ["results"] },
           { key: "financing", label: "steps.financing", covers: ["financing", "financing-request"] },
@@ -130,9 +193,11 @@ export default function HomePage() {
         );
       })()}
 
-      {/* ── Main content (step-based) ───────────────────────────────── */}
+      {/* ══════════════════════════════════════════════════════════════
+          MAIN CONTENT — Step-based flow
+          ══════════════════════════════════════════════════════════════ */}
       <section className="py-8 sm:py-12 px-4">
-        {step === "calculator" && <SolarCalculator onResult={handleResult} />}
+        {step === "calculator" && null /* Calculator is in the hero */}
 
         {step === "results" && result && (
           <ResultsPanel result={result} onNext={() => setStep("financing")} onReset={reset} />
@@ -187,50 +252,106 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* ── Below-the-fold sections (calculator step only) ──────────── */}
+      {/* ══════════════════════════════════════════════════════════════
+          BELOW THE FOLD — Cities, Tools, How It Works (calculator step)
+          ══════════════════════════════════════════════════════════════ */}
       {step === "calculator" && (
         <>
-          {/* Social proof / trust stats */}
-          <section className="py-12 px-4 border-t border-border">
-            <div className="max-w-4xl mx-auto">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-                <div className="bg-card rounded-xl shadow-ambient p-4">
-                  <div className="text-2xl mb-1">&#128200;</div>
-                  <p className="text-xl font-heading font-bold text-foreground">13+</p>
-                  <p className="text-xs text-muted-foreground">{t("home.statProviders")}</p>
+          {/* ── City Grid ────────────────────────────────────────── */}
+          <section className="py-16 px-4 sm:px-6">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex items-baseline justify-between mb-8">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground">
+                    {t("home.citiesTitle") || "Principales ciudades"}
+                  </h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {t("home.citiesSubtitle") || "Instaladores solares verificados cerca de ti"}
+                  </p>
                 </div>
-                <div className="bg-card rounded-xl shadow-ambient p-4">
-                  <div className="text-2xl mb-1">&#127968;</div>
-                  <p className="text-xl font-heading font-bold text-foreground">17</p>
-                  <p className="text-xs text-muted-foreground">{t("home.statRegions")}</p>
-                </div>
-                <div className="bg-card rounded-xl shadow-ambient p-4">
-                  <div className="text-2xl mb-1">&#9989;</div>
-                  <p className="text-xl font-heading font-bold text-foreground">{t("home.statVerifiedCount")}</p>
-                  <p className="text-xs text-muted-foreground">{t("home.statInstallers")}</p>
-                </div>
-                <div className="bg-card rounded-xl shadow-ambient p-4">
-                  <div className="text-2xl mb-1">&#129302;</div>
-                  <p className="text-xl font-heading font-bold text-foreground">24/7</p>
-                  <p className="text-xs text-muted-foreground">{t("home.statAiAssistant")}</p>
-                </div>
+                <a
+                  href="https://tuenergiaverde.es"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-semibold text-primary hover:opacity-80 transition-opacity hidden sm:block"
+                >
+                  Ver todas las ciudades &rarr;
+                </a>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {CITIES.map((c) => (
+                  <a
+                    key={c.name}
+                    href={`https://tuenergiaverde.es/${c.name.toLowerCase().replace(/\s+/g, "-")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative rounded-2xl overflow-hidden aspect-[4/3] hover:-translate-y-0.5 hover:shadow-ambient-lg transition-all"
+                  >
+                    <div className="absolute inset-0">
+                      <Image
+                        src={c.img}
+                        alt={`Instaladores solares en ${c.name}`}
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent z-[2]" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4 z-[3]">
+                      <span className="text-white font-bold text-sm block">{c.name}</span>
+                      <span className="text-white/70 text-xs">{c.installers} instaladores</span>
+                    </div>
+                  </a>
+                ))}
               </div>
             </div>
           </section>
 
-          {/* How it works */}
-          <section className="py-12 px-4 bg-muted/30">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-xl sm:text-2xl font-heading font-bold text-foreground text-center mb-8">
+          {/* ── Tools ────────────────────────────────────────────── */}
+          <section className="py-16 px-4 sm:px-6 bg-surface-container-low">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground text-center mb-3">
+                {t("home.tools")}
+              </h2>
+              <p className="text-muted-foreground text-center max-w-lg mx-auto mb-10">
+                {t("home.toolsSubtitle")}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <a href="/" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient hover:shadow-ambient-lg transition-all hover:-translate-y-0.5 group text-center">
+                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#9728;&#65039;</div>
+                  <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolCalcTitle")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("home.toolCalcDesc")}</p>
+                </a>
+                <a href="/comparar-financiacion" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient hover:shadow-ambient-lg transition-all hover:-translate-y-0.5 group text-center">
+                  <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#128176;</div>
+                  <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolFinancingTitle")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("home.toolFinancingDesc")}</p>
+                </a>
+                <a href="/revisar-propuesta" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient hover:shadow-ambient-lg transition-all hover:-translate-y-0.5 group text-center">
+                  <div className="w-14 h-14 rounded-xl bg-tertiary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#128203;</div>
+                  <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolReviewTitle")}</h3>
+                  <p className="text-sm text-muted-foreground">{t("home.toolReviewDesc")}</p>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          {/* ── How it works ─────────────────────────────────────── */}
+          <section className="py-16 px-4 sm:px-6">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground text-center mb-3">
                 {t("home.howItWorks")}
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+              <p className="text-muted-foreground text-center max-w-lg mx-auto mb-10">
+                {t("home.howItWorksSubtitle") || "Cuatro pasos para encontrar tu mejor opcion solar"}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
                 {(["1", "2", "3", "4"] as const).map((n) => (
-                  <div key={n} className="text-center bg-card rounded-xl shadow-ambient p-5">
-                    <div className="w-9 h-9 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-3">
+                  <div key={n} className="text-center bg-white rounded-2xl shadow-ambient p-6">
+                    <div className="w-10 h-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-extrabold mx-auto mb-4">
                       {n}
                     </div>
-                    <h3 className="font-heading font-bold text-sm text-foreground mb-1">
+                    <h3 className="font-heading font-extrabold text-sm text-foreground mb-1">
                       {t(`home.step${n}Title`)}
                     </h3>
                     <p className="text-xs text-muted-foreground">
@@ -242,58 +363,38 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Tools */}
-          <section className="py-12 px-4">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-xl sm:text-2xl font-heading font-bold text-foreground text-center mb-2">
-                {t("home.tools")}
-              </h2>
-              <p className="text-muted-foreground text-center mb-8">
-                {t("home.toolsSubtitle")}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <FeatureCard
-                  icon="&#9728;&#65039;"
-                  title={t("home.toolCalcTitle")}
-                  description={t("home.toolCalcDesc")}
-                  href="/"
-                />
-                <FeatureCard
-                  icon="&#128176;"
-                  title={t("home.toolFinancingTitle")}
-                  description={t("home.toolFinancingDesc")}
-                  href="/comparar-financiacion"
-                />
-                <FeatureCard
-                  icon="&#128203;"
-                  title={t("home.toolReviewTitle")}
-                  description={t("home.toolReviewDesc")}
-                  href="/revisar-propuesta"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Why Precio Solar */}
-          <section className="py-12 px-4 bg-muted/30">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-xl sm:text-2xl font-heading font-bold text-foreground text-center mb-8">
+          {/* ── Why Precio Solar ──────────────────────────────────── */}
+          <section className="py-16 px-4 sm:px-6 bg-surface-container-low">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground text-center mb-10">
                 {t("home.whyUs")}
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-                <div>
-                  <div className="text-3xl mb-2">&#127919;</div>
-                  <h3 className="font-heading font-bold mb-1">{t("home.independent")}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient text-center">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                    </svg>
+                  </div>
+                  <h3 className="font-heading font-extrabold mb-2">{t("home.independent")}</h3>
                   <p className="text-sm text-muted-foreground">{t("home.independentDesc")}</p>
                 </div>
-                <div>
-                  <div className="text-3xl mb-2">&#128269;</div>
-                  <h3 className="font-heading font-bold mb-1">{t("home.transparent")}</h3>
+                <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient text-center">
+                  <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                  </div>
+                  <h3 className="font-heading font-extrabold mb-2">{t("home.transparent")}</h3>
                   <p className="text-sm text-muted-foreground">{t("home.transparentDesc")}</p>
                 </div>
-                <div>
-                  <div className="text-3xl mb-2">&#9889;</div>
-                  <h3 className="font-heading font-bold mb-1">{t("home.fast")}</h3>
+                <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient text-center">
+                  <div className="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+                    </svg>
+                  </div>
+                  <h3 className="font-heading font-extrabold mb-2">{t("home.fast")}</h3>
                   <p className="text-sm text-muted-foreground">{t("home.fastDesc")}</p>
                 </div>
               </div>

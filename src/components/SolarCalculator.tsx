@@ -86,9 +86,10 @@ export interface CalculationResult {
 
 interface SolarCalculatorProps {
   onResult: (result: CalculationResult) => void;
+  compact?: boolean;
 }
 
-export default function SolarCalculator({ onResult }: SolarCalculatorProps) {
+export default function SolarCalculator({ onResult, compact }: SolarCalculatorProps) {
   const { t } = useTranslation();
   const [postalCode, setPostalCode] = useState("");
   const [monthlyBill, setMonthlyBill] = useState(80);
@@ -127,10 +128,17 @@ export default function SolarCalculator({ onResult }: SolarCalculatorProps) {
   }, [postalCode, monthlyBill, includeBattery, onResult]);
 
   return (
-    <div className="bg-card rounded-2xl shadow-ambient p-6 sm:p-8 max-w-lg mx-auto">
-      <h2 className="text-2xl font-heading font-bold text-foreground mb-6">
-        {t("calc.title")}
-      </h2>
+    <div className={compact ? "" : "bg-card rounded-2xl shadow-ambient p-6 sm:p-8 max-w-lg mx-auto"}>
+      {!compact && (
+        <h2 className="text-2xl font-heading font-bold text-foreground mb-6">
+          {t("calc.title")}
+        </h2>
+      )}
+      {compact && (
+        <h3 className="text-base font-heading font-extrabold text-foreground mb-4 text-center">
+          {t("calc.title")}
+        </h3>
+      )}
 
       {/* Postal Code */}
       <div className="mb-5">
