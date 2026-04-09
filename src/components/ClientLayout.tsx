@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Image from "next/image";
 import type { Locale } from "@/i18n/index";
 import LocaleProvider from "@/i18n/LocaleProvider";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -16,9 +17,9 @@ function Nav() {
       <nav className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         <a
           href="/"
-          className="flex items-center gap-2 text-xl font-heading font-bold text-foreground tracking-tight hover:text-primary transition-colors"
+          className="flex items-center gap-2 text-xl font-heading font-extrabold text-foreground tracking-tight hover:text-primary transition-colors"
         >
-          <span className="text-2xl">&#9728;&#65039;</span>
+          <Image src="/logo.png" alt="Precio Solar" width={32} height={32} className="w-8 h-8" />
           {SITE_NAME}
         </a>
         <div className="flex items-center gap-3 sm:gap-5 text-sm text-muted-foreground">
