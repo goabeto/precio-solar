@@ -16,7 +16,7 @@ export default function FeatureCard({
   badge,
 }: FeatureCardProps) {
   const content = (
-    <div className="bg-card rounded-2xl border border-border p-6 hover:border-primary/40 hover:shadow-md transition-all group relative">
+    <div className="bg-white rounded-2xl shadow-ambient hover:shadow-ambient-lg hover:-translate-y-0.5 transition-all p-6 group relative">
       {badge && (
         <span className="absolute -top-2 right-4 bg-primary text-primary-foreground text-xs font-bold px-2.5 py-0.5 rounded-full">
           {badge}

@@ -110,19 +110,26 @@ export default function CompararFinanciacionPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
-      {/* Header */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl sm:text-4xl font-heading font-bold text-foreground">
+    <>
+    {/* Hero header */}
+    <section className="bg-gradient-to-b from-surface-container-low to-background py-12 sm:py-16 px-4">
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs font-semibold mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+          13+ proveedores
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-foreground">
           {t("financingPage.title")}
         </h1>
-        <p className="mt-3 text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
           {t("financingPage.subtitle")}
         </p>
       </div>
+    </section>
 
+    <div className="max-w-4xl mx-auto px-4 -mt-2 pb-16">
       {/* Search form */}
-      <div className="bg-card rounded-2xl shadow-ambient p-6 sm:p-8 mb-8">
+      <div className="bg-card rounded-2xl shadow-ambient-lg p-6 sm:p-8 mb-8">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Amount */}
           <div>
@@ -231,8 +238,8 @@ export default function CompararFinanciacionPage() {
       )}
 
       {/* Cross-link */}
-      <div className="mt-12 text-center bg-muted/30 rounded-2xl p-8">
-        <p className="text-lg font-heading font-bold text-foreground mb-2">
+      <div className="mt-12 text-center bg-surface-container-low rounded-2xl p-8">
+        <p className="text-lg font-heading font-extrabold text-foreground mb-2">
           {t("financingPage.ctaTitle")}
         </p>
         <p className="text-muted-foreground mb-4">
@@ -240,11 +247,12 @@ export default function CompararFinanciacionPage() {
         </p>
         <a
           href="/"
-          className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-heading font-bold hover:bg-primary/90 transition-colors"
+          className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-heading font-bold hover:bg-primary/90 transition-colors shadow-ambient"
         >
           {t("financingPage.ctaButton")}
         </a>
       </div>
     </div>
+    </>
   );
 }

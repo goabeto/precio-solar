@@ -324,15 +324,25 @@ export default function RevisarPropuestaPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 sm:px-6 py-8 sm:py-10">
-      <h1 className="text-2xl sm:text-3xl font-heading font-bold text-foreground text-center mb-2">
-        {t("review.title")}
-      </h1>
-      <p className="text-muted-foreground text-center mb-8">
-        {t("review.subtitle")}
-      </p>
+    <>
+    {/* Hero header */}
+    <section className="bg-gradient-to-b from-surface-container-low to-background py-12 sm:py-16 px-4">
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary/10 text-tertiary text-xs font-semibold mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+          Analisis independiente
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-foreground">
+          {t("review.title")}
+        </h1>
+        <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+          {t("review.subtitle")}
+        </p>
+      </div>
+    </section>
 
-      <div className="bg-card rounded-2xl shadow-ambient p-6 sm:p-8 space-y-5">
+    <div className="max-w-lg mx-auto px-4 sm:px-6 -mt-2 pb-16">
+      <div className="bg-card rounded-2xl shadow-ambient-lg p-6 sm:p-8 space-y-5">
         {/* Required fields */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-1.5">
@@ -532,5 +542,6 @@ export default function RevisarPropuestaPage() {
         </p>
       </div>
     </div>
+    </>
   );
 }
