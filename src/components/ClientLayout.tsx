@@ -19,7 +19,7 @@ function Nav() {
           href="/"
           className="flex items-center gap-2 text-xl font-heading font-extrabold text-foreground tracking-tight hover:text-primary transition-colors"
         >
-          <Image src="/logo.png" alt="Precio Solar" width={32} height={32} className="w-8 h-8" />
+          <Image src="/logo.png" alt="Precio Solar" width={40} height={40} className="w-10 h-10" />
           {SITE_NAME}
         </a>
         <div className="flex items-center gap-3 sm:gap-5 text-sm text-muted-foreground">

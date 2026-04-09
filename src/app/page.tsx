@@ -257,6 +257,27 @@ export default function HomePage() {
           ══════════════════════════════════════════════════════════════ */}
       {step === "calculator" && (
         <>
+          {/* ── Tools — overlaps hero bottom ──────────────────────── */}
+          <div className="relative z-20 -mt-12 max-w-6xl mx-auto px-4 sm:px-6 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <a href="/" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient-lg hover:shadow-ambient-lg transition-all hover:-translate-y-1 group text-center">
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#9728;&#65039;</div>
+                <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolCalcTitle")}</h3>
+                <p className="text-sm text-muted-foreground">{t("home.toolCalcDesc")}</p>
+              </a>
+              <a href="/comparar-financiacion" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient-lg hover:shadow-ambient-lg transition-all hover:-translate-y-1 group text-center">
+                <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#128176;</div>
+                <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolFinancingTitle")}</h3>
+                <p className="text-sm text-muted-foreground">{t("home.toolFinancingDesc")}</p>
+              </a>
+              <a href="/revisar-propuesta" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient-lg hover:shadow-ambient-lg transition-all hover:-translate-y-1 group text-center">
+                <div className="w-14 h-14 rounded-xl bg-tertiary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#128203;</div>
+                <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolReviewTitle")}</h3>
+                <p className="text-sm text-muted-foreground">{t("home.toolReviewDesc")}</p>
+              </a>
+            </div>
+          </div>
+
           {/* ── City Grid ────────────────────────────────────────── */}
           <section className="py-16 px-4 sm:px-6">
             <div className="max-w-6xl mx-auto">
@@ -303,35 +324,6 @@ export default function HomePage() {
                     </div>
                   </a>
                 ))}
-              </div>
-            </div>
-          </section>
-
-          {/* ── Tools ────────────────────────────────────────────── */}
-          <section className="py-16 px-4 sm:px-6 bg-surface-container-low">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground text-center mb-3">
-                {t("home.tools")}
-              </h2>
-              <p className="text-muted-foreground text-center max-w-lg mx-auto mb-10">
-                {t("home.toolsSubtitle")}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                <a href="/" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient hover:shadow-ambient-lg transition-all hover:-translate-y-0.5 group text-center">
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#9728;&#65039;</div>
-                  <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolCalcTitle")}</h3>
-                  <p className="text-sm text-muted-foreground">{t("home.toolCalcDesc")}</p>
-                </a>
-                <a href="/comparar-financiacion" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient hover:shadow-ambient-lg transition-all hover:-translate-y-0.5 group text-center">
-                  <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#128176;</div>
-                  <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolFinancingTitle")}</h3>
-                  <p className="text-sm text-muted-foreground">{t("home.toolFinancingDesc")}</p>
-                </a>
-                <a href="/revisar-propuesta" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient hover:shadow-ambient-lg transition-all hover:-translate-y-0.5 group text-center">
-                  <div className="w-14 h-14 rounded-xl bg-tertiary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#128203;</div>
-                  <h3 className="font-heading font-extrabold text-foreground mb-1">{t("home.toolReviewTitle")}</h3>
-                  <p className="text-sm text-muted-foreground">{t("home.toolReviewDesc")}</p>
-                </a>
               </div>
             </div>
           </section>

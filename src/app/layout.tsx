@@ -44,6 +44,10 @@ const websiteJsonLd = {
 };
 
 export const metadata: Metadata = {
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   title: {
     default:
       "Calcula el precio de tus placas solares en segundos | Precio Solar",
