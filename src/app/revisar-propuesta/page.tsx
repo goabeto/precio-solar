@@ -305,11 +305,24 @@ export default function RevisarPropuestaPage() {
           </div>
         )}
 
-        {/* CTA */}
-        <div className="mt-8 space-y-3">
+        {/* WhatsApp CTA */}
+        <div className="mt-8 bg-surface-container-low rounded-2xl p-6">
+          <div className="text-center mb-4">
+            <p className="font-heading font-extrabold text-foreground mb-1">Quieres que te ayudemos?</p>
+            <p className="text-sm text-muted-foreground">Via WhatsApp, en pocos minutos podemos conectarte con un instalador recomendado y un proveedor de financiacion. Comprobamos precios y condiciones reales por ti, y coordinamos cualquier contacto directo segun tu disponibilidad.</p>
+          </div>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <span className="text-xs text-muted-foreground">&#128274; Sin llamadas comerciales</span>
+            <span className="text-xs text-muted-foreground">&middot;</span>
+            <span className="text-xs text-muted-foreground">&#9989; Tu decides cuando y como</span>
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        <div className="mt-4 space-y-3">
           <a
             href="/"
-            className="block w-full bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold text-center hover:bg-primary/90 transition-colors"
+            className="block w-full bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold text-center hover:bg-primary/90 transition-colors shadow-ambient"
           >
             {t("reviewResult.calculateBestOption")}
           </a>

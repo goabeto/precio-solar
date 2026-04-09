@@ -125,7 +125,14 @@ function Footer() {
             </p>
           </div>
         </div>
-        <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-muted-foreground">
+        {/* Trust line */}
+        <div className="mt-6 pt-4 border-t border-border">
+          <p className="text-xs text-muted-foreground text-center">
+            &#128274; Sin llamadas comerciales &middot; No compartimos tus datos &middot; Puedes solicitar tu eliminacion en cualquier momento
+          </p>
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-muted-foreground">
           <span>
             &copy; {new Date().getFullYear()} {SITE_NAME}.{" "}
             {t("footer.copyright")}

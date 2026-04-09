@@ -377,14 +377,28 @@ export default function InstallerResults({
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl sm:text-3xl font-heading font-bold">
+        <h2 className="text-2xl sm:text-3xl font-heading font-extrabold">
           {t("installers.title", { city: result.location.city || result.location.region })}
         </h2>
         <p className="text-muted-foreground mt-1">
           {t("installers.subtitle")}
         </p>
+      </div>
+
+      {/* WhatsApp privacy pitch */}
+      <div className="bg-surface-container-low rounded-2xl p-5 sm:p-6">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" /></svg>
+          </div>
+          <div>
+            <p className="font-heading font-extrabold text-sm text-foreground mb-1">Tu privacidad es nuestra prioridad</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">Nosotros contactamos al instalador por ti via WhatsApp, protegiendo tu numero y datos personales. Sin llamadas comerciales. Recomendamos empezar con un instalador &mdash; cuando tengas una opinion, puedes contactar con otro.</p>
+          </div>
+        </div>
       </div>
 
       {dbUnavailable ? (
@@ -429,6 +443,7 @@ export default function InstallerResults({
       {selected.size > 0 && (
         <p className="text-center text-sm text-muted-foreground">
           {t("installers.selectedCount", { count: selected.size })}
+          {selected.size > 1 && <span className="block text-xs mt-1">Recomendamos empezar con uno para simplificar el proceso</span>}
         </p>
       )}
 
@@ -441,7 +456,7 @@ export default function InstallerResults({
             )
           }
           disabled={selected.size === 0 && installers.length > 0}
-          className="flex-1 bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex-1 bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-ambient"
         >
           {installers.length === 0
             ? t("installers.requestContact")
@@ -453,6 +468,19 @@ export default function InstallerResults({
         >
           {t("installers.back")}
         </button>
+      </div>
+
+      {/* More installers link */}
+      <div className="text-center pt-4 border-t border-border">
+        <p className="text-sm text-muted-foreground mb-2">Quieres ver mas instaladores en tu zona?</p>
+        <a
+          href={`https://tuenergiaverde.es/${(result.location.city || "").toLowerCase().replace(/\s+/g, "-")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-semibold text-primary hover:underline"
+        >
+          Ver todos en tuenergiaverde.es &rarr;
+        </a>
       </div>
     </div>
   );
