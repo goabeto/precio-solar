@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const installers = await getInstallersWithDetails(city, region, 6);
+  const installers = await getInstallersWithDetails(city, region, 10);
 
   return NextResponse.json({
     installers: installers.map((i) => ({

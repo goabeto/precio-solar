@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { geocodePostalCode, geocodeFallback } from "@/lib/geocode";
 import { getReferencePricing, getLoanProducts, getSubsidyPrograms } from "@/lib/data";
+import { getServerSupabase } from "@/lib/supabase-server";
 import { estimatePrice, roundToStandardSize } from "@/lib/pricing";
 import { getDictionary, translate, type Locale, LOCALES, DEFAULT_LOCALE, COOKIE_NAME } from "@/i18n";
 
@@ -133,6 +134,39 @@ export async function POST(req: NextRequest) {
     else if (avgScore >= 2.5) overallRating = "good";
     else if (avgScore >= 1.5) overallRating = "fair";
     else overallRating = "review_recommended";
+
+    // Store proposal for market intelligence (fire-and-forget)
+    const supabase = getServerSupabase();
+    if (supabase) {
+      supabase
+        .from("solar_journey_proposals" as never)
+        .insert({
+          postal_code: postalCode,
+          city: geo.city,
+          region: geo.region,
+          quoted_price: quotedPrice,
+          system_size_kwp: systemSizeKwp,
+          panel_count: panelCount || null,
+          panel_brand: panelBrand || null,
+          inverter_brand: inverterBrand || null,
+          include_battery: includeBattery,
+          battery_kwh: batteryKwh || null,
+          subsidy_included: subsidyIncluded || null,
+          financing_tae: financingTae || null,
+          financing_monthly: financingMonthly || null,
+          financing_term_months: financingTermMonths || null,
+          price_score: priceScore,
+          financing_score: financingScore,
+          overall_rating: overallRating,
+          market_avg: refPrice.avg,
+          market_min: refPrice.min,
+          market_max: refPrice.max,
+          best_subsidy_amount: bestSubsidyAmount,
+        } as never)
+        .then(({ error }) => {
+          if (error) console.error("Failed to store proposal:", error.message);
+        });
+    }
 
     return NextResponse.json({
       location: {

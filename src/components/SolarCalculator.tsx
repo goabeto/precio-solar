@@ -91,13 +91,31 @@ interface SolarCalculatorProps {
 
 export default function SolarCalculator({ onResult, compact }: SolarCalculatorProps) {
   const { t } = useTranslation();
+  const [phone, setPhone] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [monthlyBill, setMonthlyBill] = useState(80);
   const [includeBattery, setIncludeBattery] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Spanish mobile: 6xx or 7xx (9 digits), optionally with +34 prefix
+  const normalizePhone = (raw: string): string | null => {
+    const cleaned = raw.replace(/[\s\-().]/g, "");
+    // +34 6/7xxxxxxxx
+    if (/^\+34[67]\d{8}$/.test(cleaned)) return cleaned;
+    // 34 6/7xxxxxxxx (without +)
+    if (/^34[67]\d{8}$/.test(cleaned)) return "+" + cleaned;
+    // 6/7xxxxxxxx (9 digits)
+    if (/^[67]\d{8}$/.test(cleaned)) return "+34" + cleaned;
+    return null;
+  };
+
   const calculate = useCallback(async () => {
+    const normalizedPhone = normalizePhone(phone);
+    if (!normalizedPhone) {
+      setError(t("calc.errorPhone"));
+      return;
+    }
     if (!postalCode || postalCode.length < 4) {
       setError(t("calc.errorPostalCode"));
       return;
@@ -109,7 +127,7 @@ export default function SolarCalculator({ onResult, compact }: SolarCalculatorPr
       const res = await fetch("/api/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ postalCode, monthlyBill, includeBattery }),
+        body: JSON.stringify({ phone: normalizePhone(phone), postalCode, monthlyBill, includeBattery }),
       });
 
       const data = await res.json();
@@ -125,7 +143,7 @@ export default function SolarCalculator({ onResult, compact }: SolarCalculatorPr
     } finally {
       setLoading(false);
     }
-  }, [postalCode, monthlyBill, includeBattery, onResult]);
+  }, [phone, postalCode, monthlyBill, includeBattery, onResult]);
 
   return (
     <div className={compact ? "" : "bg-card rounded-2xl shadow-ambient p-6 sm:p-8 max-w-lg mx-auto"}>
@@ -140,8 +158,30 @@ export default function SolarCalculator({ onResult, compact }: SolarCalculatorPr
         </h3>
       )}
 
+      {/* WhatsApp / Phone */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-foreground mb-1.5">
+          {t("calc.phone")}
+        </label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">+34</span>
+          <input
+            type="tel"
+            inputMode="tel"
+            maxLength={12}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value.replace(/[^\d+\s\-]/g, ""))}
+            placeholder={t("calc.phonePlaceholder")}
+            className="w-full pl-12 pr-4 py-3 rounded-lg border border-input bg-background text-foreground text-lg focus:ring-2 focus:ring-ring focus:border-ring outline-none transition"
+          />
+        </div>
+        <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+          {t("calc.phoneDisclaimer")}
+        </p>
+      </div>
+
       {/* Postal Code */}
-      <div className="mb-5">
+      <div className="mb-4">
         <label className="block text-sm font-medium text-foreground mb-1.5">
           {t("calc.postalCode")}
         </label>

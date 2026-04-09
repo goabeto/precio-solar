@@ -75,6 +75,8 @@ export interface LoanProduct {
 }
 
 // ── Hardcoded fallback loan data (used when DB tables don't exist) ──
+// Last updated: 2026-04-10 — Sources: CaixaBank.es, BBVA.es, ICO.es, provider websites
+// Next review: 2026-04-17 (weekly cadence)
 const FALLBACK_PROVIDERS: Record<string, LoanProvider> = {
   caixabank: { id: "fb-caixa", slug: "caixabank", name: "CaixaBank", short_name: "CaixaBank", logo_url: null, website: "https://www.caixabank.es", provider_type: "bank", is_digital: false },
   bbva: { id: "fb-bbva", slug: "bbva", name: "BBVA", short_name: "BBVA", logo_url: null, website: "https://www.bbva.es", provider_type: "bank", is_digital: false },
@@ -93,8 +95,8 @@ const FALLBACK_PROVIDERS: Record<string, LoanProvider> = {
 
 const FALLBACK_LOAN_PRODUCTS: LoanProduct[] = [
   { id: "fb-lp-1", provider_id: "fb-ico", slug: "ico-linea-verde", name: "Linea ICO Verde", product_type: "ico_line", tae_min: 2.50, tae_max: 4.00, tin_min: 2.00, tin_max: 3.50, amount_min: 5000, amount_max: 100000, term_min_months: 12, term_max_months: 120, opening_fee_pct: 0, approval_speed: "10_days", fully_digital: false, subsidy_compatible: true, product_url: "https://www.ico.es/linea-ico-verde", provider: FALLBACK_PROVIDERS["ico-verde"] },
-  { id: "fb-lp-2", provider_id: "fb-caixa", slug: "caixabank-facilitea-solar", name: "Facilitea Paneles Solares", product_type: "green_loan", tae_min: 3.00, tae_max: 5.50, tin_min: 2.80, tin_max: 5.00, amount_min: 3000, amount_max: 60000, term_min_months: 12, term_max_months: 120, opening_fee_pct: 0, approval_speed: "48h", fully_digital: false, subsidy_compatible: true, product_url: "https://www.caixabank.es/particular/facilitea/paneles-solares.html", provider: FALLBACK_PROVIDERS.caixabank },
-  { id: "fb-lp-3", provider_id: "fb-bbva", slug: "bbva-eficiencia-energetica", name: "Prestamo Eficiencia Energetica", product_type: "energy_loan", tae_min: 4.50, tae_max: 7.00, tin_min: 4.00, tin_max: 6.50, amount_min: 3000, amount_max: 75000, term_min_months: 12, term_max_months: 120, opening_fee_pct: 0, approval_speed: "48h", fully_digital: false, subsidy_compatible: true, product_url: "https://www.bbva.es/personas/productos/prestamos/prestamo-eficiencia-energetica-particulares.html", provider: FALLBACK_PROVIDERS.bbva },
+  { id: "fb-lp-2", provider_id: "fb-caixa", slug: "caixabank-facilitea-solar", name: "Facilitea Paneles Solares", product_type: "green_loan", tae_min: 2.90, tae_max: 3.90, tin_min: 2.86, tin_max: 3.83, amount_min: 3000, amount_max: 60000, term_min_months: 15, term_max_months: 123, opening_fee_pct: 0, approval_speed: "48h", fully_digital: false, subsidy_compatible: true, product_url: "https://www.caixabank.es/particular/facilitea/paneles-solares.html", provider: FALLBACK_PROVIDERS.caixabank },
+  { id: "fb-lp-3", provider_id: "fb-bbva", slug: "bbva-eficiencia-energetica", name: "Prestamo Eficiencia Energetica", product_type: "energy_loan", tae_min: 4.50, tae_max: 7.00, tin_min: 4.00, tin_max: 6.50, amount_min: 3000, amount_max: 75000, term_min_months: 24, term_max_months: 180, opening_fee_pct: 0, approval_speed: "48h", fully_digital: false, subsidy_compatible: true, product_url: "https://www.bbva.es/personas/productos/prestamos/prestamo-eficiencia-energetica-particulares.html", provider: FALLBACK_PROVIDERS.bbva },
   { id: "fb-lp-4", provider_id: "fb-kut", slug: "kutxabank-eficiencia", name: "Prestamo Eficiencia Energetica", product_type: "energy_loan", tae_min: 4.50, tae_max: 6.50, tin_min: 4.00, tin_max: 6.00, amount_min: 3000, amount_max: 50000, term_min_months: 12, term_max_months: 96, opening_fee_pct: 0, approval_speed: "5_days", fully_digital: false, subsidy_compatible: true, product_url: null, provider: FALLBACK_PROVIDERS.kutxabank },
   { id: "fb-lp-5", provider_id: "fb-pon", slug: "pontio-solar", name: "Financiacion Solar Pontio", product_type: "solar_loan", tae_min: 4.50, tae_max: 7.00, tin_min: 4.00, tin_max: 6.50, amount_min: 3000, amount_max: 60000, term_min_months: 24, term_max_months: 240, opening_fee_pct: 0, approval_speed: "instant", fully_digital: true, subsidy_compatible: true, product_url: "https://www.gopontio.com/placas-solares-financiadas-clientes-pontio/", provider: FALLBACK_PROVIDERS.pontio },
   { id: "fb-lp-6", provider_id: "fb-bki", slug: "bankinter-eficiencia", name: "Prestamo Eficiencia Energetica", product_type: "energy_loan", tae_min: 5.00, tae_max: 7.00, tin_min: 4.50, tin_max: 6.50, amount_min: 4000, amount_max: 30000, term_min_months: 24, term_max_months: 120, opening_fee_pct: 0, approval_speed: "24h", fully_digital: true, subsidy_compatible: true, product_url: "https://www.bankinterconsumerfinance.com/financiacion/prestamos/prestamo-eficiencia-energetica", provider: FALLBACK_PROVIDERS.bankinter },
@@ -151,7 +153,7 @@ export const getLoanProviders = cache(async (): Promise<LoanProvider[]> => {
 
 export async function getInstallersByRegion(
   region: string,
-  limit: number = 6
+  limit: number = 10
 ): Promise<ListingWithPricing[]> {
   const supabase = getServerSupabase();
   if (!supabase) return [];
@@ -200,7 +202,7 @@ export async function getInstallersByRegion(
 
 export async function getInstallersByCity(
   city: string,
-  limit: number = 6
+  limit: number = 10
 ): Promise<ListingWithPricing[]> {
   const supabase = getServerSupabase();
   if (!supabase) return [];
@@ -253,7 +255,7 @@ export async function getInstallersByCity(
 export async function getInstallersWithDetails(
   city: string,
   region: string,
-  limit: number = 6
+  limit: number = 10
 ): Promise<ListingWithDetails[]> {
   const supabase = getServerSupabase();
   if (!supabase) return [];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatEuro as fmtEuro } from "@/i18n/formatters";
 
@@ -325,27 +326,65 @@ export default function RevisarPropuestaPage() {
 
   return (
     <>
-    {/* Hero header */}
-    <section className="bg-gradient-to-b from-surface-container-low to-background py-12 sm:py-16 px-4">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary/10 text-tertiary text-xs font-semibold mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
-          Analisis independiente
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-foreground">
-          {t("review.title")}
-        </h1>
-        <p className="mt-3 text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-          {t("review.subtitle")}
-        </p>
+    {/* Hero with background image — left text, right form */}
+    <section className="relative w-full overflow-hidden bg-[#1a1610]">
+      <div className="absolute inset-0 z-0">
+        <Image src="/hero-proposal.jpg" alt="Solar panel close-up on terracotta roof" fill className="object-cover object-center" priority />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a1610]/92 via-[#1a1610]/75 to-[#1a1610]/50" />
       </div>
-    </section>
-
-    <div className="max-w-lg mx-auto px-4 sm:px-6 -mt-2 pb-16">
-      <div className="bg-card rounded-2xl shadow-ambient-lg p-6 sm:p-8 space-y-5">
+      <div className="relative z-10 w-full pt-16 sm:pt-20 pb-20 sm:pb-24 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/80 text-sm font-medium mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#f5a623] animate-pulse" />
+            Analisis independiente &middot; Datos reales de mercado
+          </div>
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+            {/* Left — Context */}
+            <div className="lg:col-span-3">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white mb-5 leading-[1.1] tracking-tight">
+                {t("review.title")}
+              </h1>
+              <p className="text-white/80 text-base sm:text-lg max-w-xl mb-6 leading-relaxed">
+                {t("review.subtitle")}
+              </p>
+              <p className="text-white/60 text-sm max-w-xl mb-8 leading-relaxed">
+                Introduce los datos de tu presupuesto y te diremos si el precio es competitivo, si hay subvenciones que no te han incluido, y como se comparan las condiciones de financiacion con el mercado.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 mb-8">
+                <a href="/" className="text-white/70 hover:text-white font-medium transition-colors text-sm underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
+                  Calculadora Solar
+                </a>
+                <a href="/comparar-financiacion" className="text-white/70 hover:text-white font-medium transition-colors text-sm underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
+                  Comparar Financiacion
+                </a>
+                <a href="/guias" className="text-white/70 hover:text-white font-medium transition-colors text-sm underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
+                  Guias
+                </a>
+              </div>
+              <div className="flex items-center gap-8 pt-6 border-t border-white/10">
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">15+</p>
+                  <p className="text-xs sm:text-sm text-white/60">Marcas verificadas</p>
+                </div>
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">17</p>
+                  <p className="text-xs sm:text-sm text-white/60">Comunidades</p>
+                </div>
+                <div>
+                  <p className="text-xl sm:text-2xl font-extrabold text-white">Gratis</p>
+                  <p className="text-xs sm:text-sm text-white/60">Sin compromiso</p>
+                </div>
+              </div>
+            </div>
+            {/* Right — Form in glassmorphic card */}
+            <div className="lg:col-span-2">
+              <div className="bg-white/10 backdrop-blur-xl p-1 rounded-2xl shadow-2xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/0 pointer-events-none rounded-2xl" />
+                <div className="relative z-10 bg-white rounded-xl p-4 sm:p-5 space-y-4">
+                  <h3 className="text-base font-heading font-extrabold text-foreground text-center">Analiza tu propuesta</h3>
         {/* Required fields */}
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
+          <label className="block text-xs font-medium text-foreground mb-1">
             {t("review.postalCode")}
           </label>
           <input
@@ -355,13 +394,13 @@ export default function RevisarPropuestaPage() {
             value={postalCode}
             onChange={(e) => setPostalCode(e.target.value.replace(/\D/g, ""))}
             placeholder={t("calc.postalCodePlaceholder")}
-            className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring outline-none transition"
+            className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1">
               {t("review.quotedPrice")}
             </label>
             <input
@@ -369,11 +408,11 @@ export default function RevisarPropuestaPage() {
               value={quotedPrice}
               onChange={(e) => setQuotedPrice(e.target.value)}
               placeholder={t("review.quotedPricePlaceholder")}
-              className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring outline-none transition"
+              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1">
               {t("review.systemSize")}
             </label>
             <input
@@ -382,13 +421,13 @@ export default function RevisarPropuestaPage() {
               value={systemSize}
               onChange={(e) => setSystemSize(e.target.value)}
               placeholder={t("review.systemSizePlaceholder")}
-              className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring outline-none transition"
+              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
+          <label className="block text-xs font-medium text-foreground mb-1">
             {t("review.panelCount")}
           </label>
           <input
@@ -396,14 +435,14 @@ export default function RevisarPropuestaPage() {
             value={panelCount}
             onChange={(e) => setPanelCount(e.target.value)}
             placeholder={t("review.panelCountPlaceholder")}
-            className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring outline-none transition"
+            className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
           />
         </div>
 
         {/* Equipment */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1">
               {t("review.panelBrand")}
             </label>
             <input
@@ -411,11 +450,11 @@ export default function RevisarPropuestaPage() {
               value={panelBrand}
               onChange={(e) => setPanelBrand(e.target.value)}
               placeholder={t("review.panelBrandPlaceholder")}
-              className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring outline-none transition"
+              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
+            <label className="block text-xs font-medium text-foreground mb-1">
               {t("review.inverterBrand")}
             </label>
             <input
@@ -423,7 +462,7 @@ export default function RevisarPropuestaPage() {
               value={inverterBrand}
               onChange={(e) => setInverterBrand(e.target.value)}
               placeholder={t("review.inverterBrandPlaceholder")}
-              className="w-full px-4 py-3 rounded-lg border border-input bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-ring outline-none transition"
+              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
             />
           </div>
         </div>
@@ -456,7 +495,7 @@ export default function RevisarPropuestaPage() {
 
         {/* Subsidy included */}
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
+          <label className="block text-xs font-medium text-foreground mb-1">
             {t("review.subsidyIncludedLabel")}
           </label>
           <div className="flex gap-3">
@@ -482,7 +521,7 @@ export default function RevisarPropuestaPage() {
 
         {/* Financing */}
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
+          <label className="block text-xs font-medium text-foreground mb-1">
             {t("review.financingLabel")}
           </label>
           <div className="grid grid-cols-3 gap-3">
@@ -540,8 +579,73 @@ export default function RevisarPropuestaPage() {
         <p className="text-xs text-muted-foreground text-center">
           {t("review.disclaimer")}
         </p>
+                </div>{/* end white card */}
+              </div>{/* end glassmorphic wrapper */}
+            </div>{/* end lg:col-span-2 */}
+          </div>{/* end grid */}
+        </div>{/* end max-w-6xl */}
+      </div>{/* end relative z-10 */}
+      <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+    </section>{/* end hero */}
+
+    {/* ── Como funciona ──────────────────────────────────────── */}
+    <section className="py-16 px-4 sm:px-6 bg-surface-container-low">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground text-center mb-3">
+          {t("home.howItWorks")}
+        </h2>
+        <p className="text-muted-foreground text-center max-w-lg mx-auto mb-10">
+          {t("home.howItWorksSubtitle")}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
+          {(["1", "2", "3", "4"] as const).map((n) => (
+            <div key={n} className="text-center bg-white rounded-2xl shadow-ambient p-6">
+              <div className="w-10 h-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-extrabold mx-auto mb-4">
+                {n}
+              </div>
+              <h3 className="font-heading font-extrabold text-sm text-foreground mb-1">
+                {t(`home.step${n}Title`)}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {t(`home.step${n}Desc`)}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
+
+    {/* ── Por que Precio Solar ────────────────────────────────── */}
+    <section className="py-16 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground text-center mb-10">
+          {t("home.whyUs")}
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient text-center">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" /></svg>
+            </div>
+            <h3 className="font-heading font-extrabold mb-2">{t("home.independent")}</h3>
+            <p className="text-sm text-muted-foreground">{t("home.independentDesc")}</p>
+          </div>
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient text-center">
+            <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+            </div>
+            <h3 className="font-heading font-extrabold mb-2">{t("home.transparent")}</h3>
+            <p className="text-sm text-muted-foreground">{t("home.transparentDesc")}</p>
+          </div>
+          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient text-center">
+            <div className="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg>
+            </div>
+            <h3 className="font-heading font-extrabold mb-2">{t("home.fast")}</h3>
+            <p className="text-sm text-muted-foreground">{t("home.fastDesc")}</p>
+          </div>
+        </div>
+      </div>
+    </section>
     </>
   );
 }

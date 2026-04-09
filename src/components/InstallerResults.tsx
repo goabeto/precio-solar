@@ -54,6 +54,26 @@ export interface InstallerDetail {
   services: InstallerService[];
 }
 
+// Partner installers by region — shown as "Top Pick"
+const PARTNER_BY_REGION: Record<string, string> = {
+  "Madrid": "Xolary",
+  "Castilla-La Mancha": "Xolary",
+  "Castilla y León": "Xolary",
+  "Cataluña": "ESR",
+  "Cataluna": "ESR",
+  "Comunidad Valenciana": "ESR",
+};
+const DEFAULT_PARTNER = "SotySolar";
+
+function getPartnerName(region: string): string {
+  return PARTNER_BY_REGION[region] || DEFAULT_PARTNER;
+}
+
+function isPartnerInstaller(installer: InstallerDetail, region: string): boolean {
+  const partner = getPartnerName(region);
+  return installer.name.toLowerCase().includes(partner.toLowerCase());
+}
+
 interface InstallerResultsProps {
   result: CalculationResult;
   onSelectInstallers: (ids: string[], installers: InstallerDetail[]) => void;
@@ -64,10 +84,12 @@ function InstallerCard({
   installer,
   isSelected,
   onToggle,
+  isPartner,
 }: {
   installer: InstallerDetail;
   isSelected: boolean;
   onToggle: () => void;
+  isPartner?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const { t, locale } = useTranslation();
@@ -102,7 +124,12 @@ function InstallerCard({
       <div className="p-4 cursor-pointer" onClick={onToggle}>
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <h3 className="font-heading font-bold text-foreground">{installer.name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="font-heading font-bold text-foreground">{installer.name}</h3>
+              {isPartner && (
+                <span className="text-xs font-bold bg-accent text-accent-foreground px-2 py-0.5 rounded-full">Top Pick</span>
+              )}
+            </div>
             <p className="text-sm text-muted-foreground">
               {installer.city}, {installer.region}
             </p>
@@ -381,12 +408,19 @@ export default function InstallerResults({
         </div>
       ) : (
         <div className="space-y-3">
-          {installers.map((installer) => (
+          {[...installers]
+            .sort((a, b) => {
+              const aPartner = isPartnerInstaller(a, result.location.region) ? 0 : 1;
+              const bPartner = isPartnerInstaller(b, result.location.region) ? 0 : 1;
+              return aPartner - bPartner;
+            })
+            .map((installer) => (
             <InstallerCard
               key={installer.id}
               installer={installer}
               isSelected={selected.has(installer.id)}
               onToggle={() => toggleSelect(installer.id)}
+              isPartner={isPartnerInstaller(installer, result.location.region)}
             />
           ))}
         </div>
