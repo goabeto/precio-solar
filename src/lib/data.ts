@@ -1,5 +1,7 @@
 import { cache } from "react";
 import { getServerSupabase } from "./supabase-server";
+import { dedupListings } from "./dedup";
+import { isSubsidiesApiConfigured, resolveAddress } from "./subsidies-api";
 import type { ReferencePricing } from "./pricing";
 import type {
   Listing,
@@ -10,6 +12,7 @@ import type {
   Certification,
   EquipmentBrand,
   SubsidyProgram,
+  ResolverResult,
 } from "@shared/types";
 
 const COUNTRY = "spain";
@@ -182,7 +185,7 @@ export async function getInstallersByRegion(
     supabase.from("services").select("*").in("listing_id", listingIds),
   ]);
 
-  return listings.map((listing) => ({
+  const results = listings.map((listing) => ({
     ...listing,
     pricing: ((pricingData || []) as unknown as Pricing[]).filter(
       (p) => p.listing_id === listing.id
@@ -191,6 +194,8 @@ export async function getInstallersByRegion(
       (s) => s.listing_id === listing.id
     ),
   }));
+
+  return dedupListings(results);
 }
 
 export async function getInstallersByCity(
@@ -228,7 +233,7 @@ export async function getInstallersByCity(
     supabase.from("services").select("*").in("listing_id", listingIds),
   ]);
 
-  return listings.map((listing) => ({
+  const results = listings.map((listing) => ({
     ...listing,
     pricing: ((pricingData || []) as unknown as Pricing[]).filter(
       (p) => p.listing_id === listing.id
@@ -237,6 +242,8 @@ export async function getInstallersByCity(
       (s) => s.listing_id === listing.id
     ),
   }));
+
+  return dedupListings(results);
 }
 
 // ============================================================
@@ -305,7 +312,7 @@ export async function getInstallersWithDetails(
     supabase.from("equipment_brands").select("*").in("listing_id", listingIds),
   ]);
 
-  return listings.map((listing) => ({
+  const results = listings.map((listing) => ({
     ...listing,
     pricing: ((pricingData || []) as unknown as Pricing[]).filter(
       (p) => p.listing_id === listing.id
@@ -321,6 +328,8 @@ export async function getInstallersWithDetails(
     ),
     images: [],
   }));
+
+  return dedupListings(results) as ListingWithDetails[];
 }
 
 // ============================================================
@@ -345,6 +354,17 @@ export async function getSubsidyPrograms(
   const { data, error } = await query;
   if (error || !data) return [];
   return data as unknown as SubsidyProgram[];
+}
+
+// ============================================================
+// Subsidies — API-first with Supabase fallback
+// ============================================================
+
+export async function resolveSubsidiesForAddress(
+  address: string
+): Promise<ResolverResult | null> {
+  if (!isSubsidiesApiConfigured()) return null;
+  return resolveAddress(address);
 }
 
 // ============================================================

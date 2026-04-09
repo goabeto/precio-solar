@@ -22,6 +22,27 @@ const dmSans = DM_Sans({
 const SITE_NAME = "Precio Solar";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://preciosolar.es";
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: "Calculadora solar independiente para el mercado espanol. Compara precios, subvenciones y financiacion para tu instalacion de placas solares.",
+  sameAs: ["https://tuenergiaverde.es"],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/?postalCode={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export const metadata: Metadata = {
   title: {
     default:
@@ -52,6 +73,14 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={`${inter.variable} ${dmSans.variable}`}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
           <Script
             defer
