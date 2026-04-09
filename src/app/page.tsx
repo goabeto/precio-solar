@@ -76,7 +76,7 @@ export default function HomePage() {
           </div>
 
           {/* Content */}
-          <div className="relative z-10 w-full pt-16 sm:pt-20 pb-24 sm:pb-28 px-4 sm:px-6">
+          <div className="relative z-10 w-full pt-16 sm:pt-20 pb-20 sm:pb-24 px-4 sm:px-6">
             <div className="max-w-6xl mx-auto">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/80 text-sm font-medium mb-6">
@@ -138,8 +138,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom gradient fade */}
-          <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+          {/* Bottom gradient fade — short to avoid blank gap */}
+          <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
         </section>
       )}
 
@@ -258,7 +258,7 @@ export default function HomePage() {
       {step === "calculator" && (
         <>
           {/* ── Tools — overlaps hero bottom ──────────────────────── */}
-          <div className="relative z-20 -mt-12 max-w-6xl mx-auto px-4 sm:px-6 mb-16">
+          <div className="relative z-20 -mt-10 max-w-5xl mx-auto px-4 sm:px-6 mb-12">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               <a href="/" className="bg-white rounded-2xl p-6 sm:p-8 shadow-ambient-lg hover:shadow-ambient-lg transition-all hover:-translate-y-1 group text-center">
                 <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">&#9728;&#65039;</div>
@@ -284,10 +284,10 @@ export default function HomePage() {
               <div className="flex items-baseline justify-between mb-8">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground">
-                    {t("home.citiesTitle") || "Principales ciudades"}
+                    {t("home.citiesTitle")}
                   </h2>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {t("home.citiesSubtitle") || "Instaladores solares verificados cerca de ti"}
+                    {t("home.citiesSubtitle")}
                   </p>
                 </div>
                 <a
@@ -329,13 +329,13 @@ export default function HomePage() {
           </section>
 
           {/* ── How it works ─────────────────────────────────────── */}
-          <section className="py-16 px-4 sm:px-6">
+          <section className="py-16 px-4 sm:px-6 bg-surface-container-low">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-foreground text-center mb-3">
                 {t("home.howItWorks")}
               </h2>
               <p className="text-muted-foreground text-center max-w-lg mx-auto mb-10">
-                {t("home.howItWorksSubtitle") || "Cuatro pasos para encontrar tu mejor opcion solar"}
+                {t("home.howItWorksSubtitle")}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
                 {(["1", "2", "3", "4"] as const).map((n) => (

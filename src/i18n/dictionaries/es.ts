@@ -46,6 +46,11 @@ const es: Record<string, string> = {
   "home.statInstallers": "Instaladores verificados",
   "home.statAiAssistant": "Asistente IA",
 
+  // ── Cities ─────────────────────────────────────────────────────────
+  "home.citiesTitle": "Principales ciudades",
+  "home.citiesSubtitle": "Instaladores solares verificados cerca de ti",
+  "home.howItWorksSubtitle": "Cuatro pasos para encontrar tu mejor opcion solar",
+
   // ── How it works ──────────────────────────────────────────────────
   "home.howItWorks": "Como funciona",
   "home.step1Title": "Calcula tu precio",

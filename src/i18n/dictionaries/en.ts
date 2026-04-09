@@ -46,6 +46,11 @@ const en: Record<string, string> = {
   "home.statInstallers": "Verified installers",
   "home.statAiAssistant": "AI Assistant",
 
+  // ── Cities ─────────────────────────────────────────────────────────
+  "home.citiesTitle": "Top cities",
+  "home.citiesSubtitle": "Verified solar installers near you",
+  "home.howItWorksSubtitle": "Four steps to find your best solar option",
+
   // ── How it works ──────────────────────────────────────────────────
   "home.howItWorks": "How it works",
   "home.step1Title": "Calculate your price",
