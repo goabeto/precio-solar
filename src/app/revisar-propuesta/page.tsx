@@ -332,7 +332,7 @@ export default function RevisarPropuestaPage() {
         {t("review.subtitle")}
       </p>
 
-      <div className="bg-card rounded-2xl shadow-lg border border-border p-6 sm:p-8 space-y-5">
+      <div className="bg-card rounded-2xl shadow-ambient p-6 sm:p-8 space-y-5">
         {/* Required fields */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-1.5">

@@ -1,51 +1,111 @@
 @import "tailwindcss";
-@source "../../../../packages/shared/src";
 
 @theme {
   --font-sans: var(--font-inter);
-  --font-heading: var(--font-dm-sans);
+  --font-heading: var(--font-jakarta);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary-container);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: 2rem;
+  --radius-full: 9999px;
 }
 
+/*
+  Design System: Luminous Architect — Precio Solar variant
+  Shared DNA with tuenergiaverde.es. Same green+yellow palette,
+  same Jakarta headings, same tonal surfaces. Slightly warmer
+  background tint to distinguish the solar purchase journey.
+*/
 :root {
-  --background: #FAFDF7;
-  --foreground: #1A1A1A;
-  --primary: #16A34A;
-  --primary-foreground: #FFFFFF;
-  --muted: #F1F5F0;
-  --muted-foreground: #6B7280;
-  --accent: #F97316;
-  --accent-foreground: #FFFFFF;
-  --card: #FFFFFF;
-  --card-foreground: #1A1A1A;
-  --border: #E2E8E0;
-  --input: #E2E8E0;
-  --ring: #16A34A;
-  --success: #DCFCE7;
-  --success-foreground: #166534;
-  --destructive: #FEF2F2;
-  --destructive-foreground: #B91C1C;
-  --radius: 0.75rem;
+  --background: #fafcf7;
+  --foreground: #0f1c20;
+
+  /* Same primary green family as tuenergiaverde */
+  --primary: #1a5c2a;
+  --primary-foreground: #ffffff;
+  --primary-container: #facc15;
+  --on-primary-container: #5c4a00;
+
+  --secondary: #006e2d;
+  --secondary-container: #b8f5c8;
+
+  --tertiary: #1e6775;
+  --tertiary-container: #c2e8f2;
+
+  /* Tonal surface system (Material Design 3 pattern) */
+  --surface: #f5f7f5;
+  --surface-container-low: #eef1ee;
+  --surface-container-high: #e4e8e4;
+  --surface-container-highest: #d8ddda;
+  --surface-container-lowest: #ffffff;
+  --on-surface: #0f1c20;
+  --on-surface-variant: #3d4d52;
+  --inverse-surface: #1a2e34;
+  --inverse-on-surface: #e8f0f3;
+
+  --muted: #eef1ee;
+  --muted-foreground: #556a62;
+
+  /* Same yellow accent as tuenergiaverde */
+  --accent: #facc15;
+  --accent-foreground: #5c4a00;
+
+  --card: #ffffff;
+  --card-foreground: #0f1c20;
+
+  --border: #e4e8e4;
+  --input: #ffffff;
+  --ring: #1a5c2a;
+
+  --success: #b8f5c8;
+  --success-foreground: #004d1a;
+  --destructive: #ffdad6;
+  --destructive-foreground: #ba1a1a;
+
+  --radius: 1rem;
 }
 
 body {
@@ -53,12 +113,38 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
+}
+
+/* Glassmorphism utility (shared with tuenergiaverde) */
+.glass {
+  background: color-mix(in srgb, var(--background) 80%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Ambient shadow utilities (no hard borders) */
+.shadow-ambient {
+  box-shadow: 0 2px 20px rgba(15, 28, 32, 0.06);
+}
+
+.shadow-ambient-lg {
+  box-shadow: 0 8px 40px rgba(15, 28, 32, 0.10);
+}
+
+/* Star rating colors */
+.star-filled {
+  color: #facc15;
+}
+
+.star-empty {
+  color: var(--surface-container-high);
 }
 
 /* Range slider styling */
@@ -67,7 +153,7 @@ input[type="range"] {
   appearance: none;
   height: 6px;
   border-radius: 3px;
-  background: var(--border);
+  background: var(--surface-container-high);
   outline: none;
 }
 
@@ -80,7 +166,7 @@ input[type="range"]::-webkit-slider-thumb {
   background: var(--primary);
   cursor: pointer;
   border: 3px solid white;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(26, 92, 42, 0.25);
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -90,5 +176,11 @@ input[type="range"]::-moz-range-thumb {
   background: var(--primary);
   cursor: pointer;
   border: 3px solid white;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(26, 92, 42, 0.25);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: var(--radius);
 }

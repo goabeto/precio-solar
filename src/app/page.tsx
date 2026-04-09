@@ -54,7 +54,7 @@ export default function HomePage() {
     <>
       {/* ── Hero (calculator step only) ─────────────────────────────── */}
       {step === "calculator" && (
-        <section className="relative py-16 sm:py-24 text-center px-4 bg-gradient-to-br from-primary/5 via-background to-amber-50/30">
+        <section className="relative py-16 sm:py-24 text-center px-4 bg-gradient-to-br from-secondary-container/20 via-background to-primary-container/10">
           <h1 className="text-3xl sm:text-5xl font-heading font-bold text-foreground max-w-2xl mx-auto leading-tight">
             {t("hero.title")}{" "}
             <span className="text-primary underline decoration-primary/30 underline-offset-4">
@@ -194,22 +194,22 @@ export default function HomePage() {
           <section className="py-12 px-4 border-t border-border">
             <div className="max-w-4xl mx-auto">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-                <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+                <div className="bg-card rounded-xl shadow-ambient p-4">
                   <div className="text-2xl mb-1">&#128200;</div>
                   <p className="text-xl font-heading font-bold text-foreground">13+</p>
                   <p className="text-xs text-muted-foreground">{t("home.statProviders")}</p>
                 </div>
-                <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+                <div className="bg-card rounded-xl shadow-ambient p-4">
                   <div className="text-2xl mb-1">&#127968;</div>
                   <p className="text-xl font-heading font-bold text-foreground">17</p>
                   <p className="text-xs text-muted-foreground">{t("home.statRegions")}</p>
                 </div>
-                <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+                <div className="bg-card rounded-xl shadow-ambient p-4">
                   <div className="text-2xl mb-1">&#9989;</div>
                   <p className="text-xl font-heading font-bold text-foreground">{t("home.statVerifiedCount")}</p>
                   <p className="text-xs text-muted-foreground">{t("home.statInstallers")}</p>
                 </div>
-                <div className="bg-card rounded-xl border border-border p-4 shadow-sm">
+                <div className="bg-card rounded-xl shadow-ambient p-4">
                   <div className="text-2xl mb-1">&#129302;</div>
                   <p className="text-xl font-heading font-bold text-foreground">24/7</p>
                   <p className="text-xs text-muted-foreground">{t("home.statAiAssistant")}</p>
@@ -226,7 +226,7 @@ export default function HomePage() {
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 {(["1", "2", "3", "4"] as const).map((n) => (
-                  <div key={n} className="text-center bg-card rounded-xl border border-border p-5">
+                  <div key={n} className="text-center bg-card rounded-xl shadow-ambient p-5">
                     <div className="w-9 h-9 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-3">
                       {n}
                     </div>

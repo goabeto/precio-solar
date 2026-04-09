@@ -36,7 +36,7 @@ export default function ResultsPanel({ result, onNext, onReset }: ResultsPanelPr
       </div>
 
       {/* Price Breakdown Card */}
-      <div className="bg-card rounded-2xl shadow-lg border border-border p-6">
+      <div className="bg-card rounded-2xl shadow-ambient p-6">
         <h3 className="font-heading font-bold text-lg mb-4">{t("results.estimatedPrice")}</h3>
         <div className="space-y-3">
           <div className="flex justify-between items-center">
@@ -66,7 +66,7 @@ export default function ResultsPanel({ result, onNext, onReset }: ResultsPanelPr
       </div>
 
       {/* Subsidies Section */}
-      <div className="bg-card rounded-2xl shadow-lg border border-border p-6">
+      <div className="bg-card rounded-2xl shadow-ambient p-6">
         <h3 className="font-heading font-bold text-lg mb-1">
           {t("results.subsidiesIn", { region: location.region || location.city })}
         </h3>
@@ -95,7 +95,7 @@ export default function ResultsPanel({ result, onNext, onReset }: ResultsPanelPr
       </div>
 
       {/* Savings Comparison */}
-      <div className="bg-card rounded-2xl shadow-lg border border-border p-6">
+      <div className="bg-card rounded-2xl shadow-ambient p-6">
         <h3 className="font-heading font-bold text-lg mb-4">{t("results.monthlySaving")}</h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-4 rounded-xl bg-destructive/30">
@@ -125,7 +125,7 @@ export default function ResultsPanel({ result, onNext, onReset }: ResultsPanelPr
       </div>
 
       {/* Financing Summary */}
-      <div className="bg-card rounded-2xl shadow-lg border border-border p-6">
+      <div className="bg-card rounded-2xl shadow-ambient p-6">
         <h3 className="font-heading font-bold text-lg mb-1">{t("results.paymentOptions")}</h3>
         <p className="text-sm text-muted-foreground mb-4">
           {t("results.paymentOptionsDesc")}

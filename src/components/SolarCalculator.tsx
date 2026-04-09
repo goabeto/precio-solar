@@ -127,7 +127,7 @@ export default function SolarCalculator({ onResult }: SolarCalculatorProps) {
   }, [postalCode, monthlyBill, includeBattery, onResult]);
 
   return (
-    <div className="bg-card rounded-2xl shadow-lg border border-border p-6 sm:p-8 max-w-lg mx-auto">
+    <div className="bg-card rounded-2xl shadow-ambient p-6 sm:p-8 max-w-lg mx-auto">
       <h2 className="text-2xl font-heading font-bold text-foreground mb-6">
         {t("calc.title")}
       </h2>

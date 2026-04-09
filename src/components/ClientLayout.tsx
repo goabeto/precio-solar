@@ -12,7 +12,7 @@ const SITE_NAME = "Precio Solar";
 function Nav() {
   const { t } = useTranslation();
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-40 w-full glass shadow-ambient">
       <nav className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         <a
           href="/"
@@ -43,7 +43,7 @@ function Nav() {
           <LanguageToggle />
           <a
             href="/"
-            className="bg-primary text-primary-foreground px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+            className="bg-primary text-primary-foreground px-4 py-1.5 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors shadow-ambient"
           >
             {t("nav.calculatePrice")}
           </a>
@@ -56,7 +56,7 @@ function Nav() {
 function Footer() {
   const { t } = useTranslation();
   return (
-    <footer className="border-t border-border mt-20">
+    <footer className="bg-surface mt-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm text-muted-foreground">
           <div>
@@ -124,9 +124,19 @@ function Footer() {
             </p>
           </div>
         </div>
-        <div className="mt-8 pt-6 border-t border-border text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} {SITE_NAME}.{" "}
-          {t("footer.copyright")}
+        <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-muted-foreground">
+          <span>
+            &copy; {new Date().getFullYear()} {SITE_NAME}.{" "}
+            {t("footer.copyright")}
+          </span>
+          <a
+            href="https://tuenergiaverde.es"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            tuenergiaverde.es &mdash; Directorio de instaladores
+          </a>
         </div>
       </div>
     </footer>

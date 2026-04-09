@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, DM_Sans } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -13,9 +13,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-dm-sans",
+  variable: "--font-jakarta",
   display: "swap",
 });
 
@@ -71,7 +71,7 @@ export default async function RootLayout({
   const locale = await getServerLocale();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${dmSans.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${jakarta.variable}`}>
       <head>
         <script
           type="application/ld+json"

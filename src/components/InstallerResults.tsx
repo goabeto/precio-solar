@@ -264,17 +264,27 @@ function InstallerCard({
             </div>
           )}
 
-          {/* Website link */}
-          {installer.website && (
+          {/* Links */}
+          <div className="flex flex-wrap gap-4">
+            {installer.website && (
+              <a
+                href={installer.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block text-sm text-primary hover:underline"
+              >
+                {t("installers.visitWebsite")} &rarr;
+              </a>
+            )}
             <a
-              href={installer.website}
+              href={`https://tuenergiaverde.es/${installer.city?.toLowerCase().replace(/\s+/g, "-")}/${installer.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block text-sm text-primary hover:underline"
+              className="inline-block text-sm text-tertiary hover:underline"
             >
-              {t("installers.visitWebsite")} &rarr;
+              Ver perfil en tuenergiaverde.es &rarr;
             </a>
-          )}
+          </div>
         </div>
       )}
     </div>

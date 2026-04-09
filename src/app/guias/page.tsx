@@ -137,7 +137,7 @@ export default async function GuidesHubPage() {
               { step: "3", title: t("guides.step3Title"), desc: t("guides.step3Desc") },
               { step: "4", title: t("guides.step4Title"), desc: t("guides.step4Desc") },
             ]).map((item) => (
-              <div key={item.step} className="text-center bg-card rounded-xl border border-border p-5">
+              <div key={item.step} className="text-center bg-card rounded-xl shadow-ambient p-5">
                 <div className="w-9 h-9 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-3">
                   {item.step}
                 </div>
