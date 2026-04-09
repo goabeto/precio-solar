@@ -55,57 +55,56 @@
 
 /*
   Design System: Luminous Architect — Precio Solar variant
-  Shared DNA with tuenergiaverde.es. Same green+yellow palette,
-  same Jakarta headings, same tonal surfaces. Slightly warmer
-  background tint to distinguish the solar purchase journey.
+  Shared DNA with tuenergiaverde.es but warmer, solar-forward personality.
+  Key differences: amber-shifted accent, warmer surfaces, rounder radius.
 */
 :root {
-  --background: #fafcf7;
-  --foreground: #0f1c20;
+  --background: #fffcf5;
+  --foreground: #1a1610;
 
-  /* Same primary green family as tuenergiaverde */
-  --primary: #1a5c2a;
+  /* Deeper, warmer green than tuenergiaverde */
+  --primary: #1a6830;
   --primary-foreground: #ffffff;
-  --primary-container: #facc15;
+  --primary-container: #f5d547;
   --on-primary-container: #5c4a00;
 
-  --secondary: #006e2d;
-  --secondary-container: #b8f5c8;
+  --secondary: #2d7a4a;
+  --secondary-container: #c8f5d5;
 
-  --tertiary: #1e6775;
-  --tertiary-container: #c2e8f2;
+  --tertiary: #8b6914;
+  --tertiary-container: #fcefc0;
 
-  /* Tonal surface system (Material Design 3 pattern) */
-  --surface: #f5f7f5;
-  --surface-container-low: #eef1ee;
-  --surface-container-high: #e4e8e4;
-  --surface-container-highest: #d8ddda;
+  /* Warmer tonal surfaces (golden undertone vs tuenergiaverde's blue) */
+  --surface: #faf7f0;
+  --surface-container-low: #f5f1e8;
+  --surface-container-high: #ede8dd;
+  --surface-container-highest: #e3ded3;
   --surface-container-lowest: #ffffff;
-  --on-surface: #0f1c20;
-  --on-surface-variant: #3d4d52;
-  --inverse-surface: #1a2e34;
-  --inverse-on-surface: #e8f0f3;
+  --on-surface: #1a1610;
+  --on-surface-variant: #4d4639;
+  --inverse-surface: #322e25;
+  --inverse-on-surface: #f5f0e5;
 
-  --muted: #eef1ee;
-  --muted-foreground: #556a62;
+  --muted: #f5f1e8;
+  --muted-foreground: #6b6355;
 
-  /* Same yellow accent as tuenergiaverde */
-  --accent: #facc15;
-  --accent-foreground: #5c4a00;
+  /* Warmer amber accent (vs tuenergiaverde's pure yellow) */
+  --accent: #f5a623;
+  --accent-foreground: #5c3d00;
 
   --card: #ffffff;
-  --card-foreground: #0f1c20;
+  --card-foreground: #1a1610;
 
-  --border: #e4e8e4;
+  --border: #ede8dd;
   --input: #ffffff;
-  --ring: #1a5c2a;
+  --ring: #1a6830;
 
-  --success: #b8f5c8;
+  --success: #c8f5d5;
   --success-foreground: #004d1a;
   --destructive: #ffdad6;
   --destructive-foreground: #ba1a1a;
 
-  --radius: 1rem;
+  --radius: 1.125rem;
 }
 
 body {
@@ -140,7 +139,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Star rating colors */
 .star-filled {
-  color: #facc15;
+  color: #f5a623;
 }
 
 .star-empty {

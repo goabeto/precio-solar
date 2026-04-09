@@ -62,17 +62,17 @@ export default function HomePage() {
           HERO — Background image + embedded calculator (calculator step)
           ══════════════════════════════════════════════════════════════ */}
       {step === "calculator" && (
-        <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#0a3d1a] via-[#145428] to-[#1a6830]">
+        <section className="relative w-full overflow-hidden bg-gradient-to-br from-[#1a1610] via-[#2a2215] to-[#1a3520]">
           {/* Background image */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/hero-solar.jpg"
-              alt="Modern home with solar panels"
+              alt="Home with solar panels in Spain"
               fill
               className="object-cover object-center"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a3d1a]/90 via-[#0a3d1a]/70 to-[#0a3d1a]/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1a1610]/92 via-[#1a1610]/75 to-[#1a1610]/50" />
           </div>
 
           {/* Content */}
@@ -80,7 +80,7 @@ export default function HomePage() {
             <div className="max-w-6xl mx-auto">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/80 text-sm font-medium mb-6">
-                <span className="w-2 h-2 rounded-full bg-[#facc15] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#f5a623] animate-pulse" />
                 {t("home.badgeFree")} &middot; {t("home.badge2Min")} &middot; {t("home.badgeNoCommitment")}
               </div>
 
@@ -89,7 +89,7 @@ export default function HomePage() {
                 <div className="lg:col-span-3">
                   <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white mb-5 leading-[1.1] tracking-tight">
                     {t("hero.title")}{" "}
-                    <span className="text-[#facc15]">{t("hero.titleHighlight")}</span>{" "}
+                    <span className="text-[#f5a623]">{t("hero.titleHighlight")}</span>{" "}
                     {t("hero.titleEnd")}
                   </h1>
                   <p className="text-white/80 text-base sm:text-lg max-w-xl mb-8 leading-relaxed">
