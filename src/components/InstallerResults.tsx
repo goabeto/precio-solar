@@ -325,6 +325,7 @@ export default function InstallerResults({
 }: InstallerResultsProps) {
   const [installers, setInstallers] = useState<InstallerDetail[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(true);
   const [dbUnavailable, setDbUnavailable] = useState(false);
   const { t, locale } = useTranslation();
@@ -422,21 +423,35 @@ export default function InstallerResults({
         </div>
       ) : (
         <div className="space-y-3">
-          {[...installers]
-            .sort((a, b) => {
+          {(() => {
+            const sorted = [...installers].sort((a, b) => {
               const aPartner = isPartnerInstaller(a, result.location.region) ? 0 : 1;
               const bPartner = isPartnerInstaller(b, result.location.region) ? 0 : 1;
               return aPartner - bPartner;
-            })
-            .map((installer) => (
-            <InstallerCard
-              key={installer.id}
-              installer={installer}
-              isSelected={selected.has(installer.id)}
-              onToggle={() => toggleSelect(installer.id)}
-              isPartner={isPartnerInstaller(installer, result.location.region)}
-            />
-          ))}
+            });
+            const visible = showAll ? sorted : sorted.slice(0, 3);
+            return (
+              <>
+                {visible.map((installer) => (
+                  <InstallerCard
+                    key={installer.id}
+                    installer={installer}
+                    isSelected={selected.has(installer.id)}
+                    onToggle={() => toggleSelect(installer.id)}
+                    isPartner={isPartnerInstaller(installer, result.location.region)}
+                  />
+                ))}
+                {!showAll && sorted.length > 3 && (
+                  <button
+                    onClick={() => setShowAll(true)}
+                    className="w-full py-3 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+                  >
+                    Ver {sorted.length - 3} instaladores mas &darr;
+                  </button>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
 

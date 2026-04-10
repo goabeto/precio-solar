@@ -8,14 +8,13 @@ import FinancingStep from "@/components/FinancingStep";
 import FinancingRequest from "@/components/FinancingRequest";
 import InstallerResults from "@/components/InstallerResults";
 import type { InstallerDetail } from "@/components/InstallerResults";
-import CaseRegistration from "@/components/CaseRegistration";
-import ChatDashboard from "@/components/ChatDashboard";
+import QualificationForm from "@/components/QualificationForm";
 import type { CalculationResult, LoanProductInfo } from "@/components/SolarCalculator";
 import { useTranslation } from "@/i18n/useTranslation";
 
-type Step = "calculator" | "results" | "financing" | "financing-request" | "installers" | "register" | "chat";
+type Step = "calculator" | "results" | "financing" | "financing-request" | "installers" | "qualify";
 
-const STEPS: Step[] = ["calculator", "results", "financing", "financing-request", "installers", "register", "chat"];
+const STEPS: Step[] = ["calculator", "results", "financing", "financing-request", "installers", "qualify"];
 
 // ── City images (shared with tuenergiaverde.es) ─────────────────
 const CITIES = [
@@ -39,7 +38,6 @@ export default function HomePage() {
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [selectedLoans, setSelectedLoans] = useState<LoanProductInfo[]>([]);
   const [selectedInstallerObjects, setSelectedInstallerObjects] = useState<InstallerDetail[]>([]);
-  const [caseId, setCaseId] = useState<string | null>(null);
 
   const handleResult = useCallback((data: CalculationResult) => {
     setResult(data);
@@ -50,7 +48,6 @@ export default function HomePage() {
     setResult(null);
     setSelectedLoans([]);
     setSelectedInstallerObjects([]);
-    setCaseId(null);
     setStep("calculator");
   }, []);
 
@@ -151,8 +148,7 @@ export default function HomePage() {
           { key: "results", label: "steps.yourPrice", covers: ["results"] },
           { key: "financing", label: "steps.financing", covers: ["financing", "financing-request"] },
           { key: "installers", label: "steps.installers", covers: ["installers"] },
-          { key: "register", label: "steps.request", covers: ["register"] },
-          { key: "chat", label: "steps.conversations", covers: ["chat"] },
+          { key: "qualify", label: "Solicitar", covers: ["qualify"] },
         ];
         return (
           <div className="max-w-4xl mx-auto px-4 pt-6 pb-2">
@@ -200,7 +196,7 @@ export default function HomePage() {
         {step === "calculator" && null /* Calculator is in the hero */}
 
         {step === "results" && result && (
-          <ResultsPanel result={result} onNext={() => setStep("financing")} onReset={reset} />
+          <ResultsPanel result={result} onNext={() => setStep("financing")} onSkipFinancing={() => setStep("installers")} onReset={reset} />
         )}
 
         {step === "financing" && result && (
@@ -229,26 +225,19 @@ export default function HomePage() {
             result={result}
             onSelectInstallers={(_ids, installers) => {
               setSelectedInstallerObjects(installers);
-              setStep("register");
+              setStep("qualify");
             }}
             onBack={() => setStep("financing")}
           />
         )}
 
-        {step === "register" && result && (
-          <CaseRegistration
+        {step === "qualify" && result && (
+          <QualificationForm
             result={result}
             selectedInstallers={selectedInstallerObjects}
-            onSuccess={(id) => {
-              setCaseId(id);
-              setStep("chat");
-            }}
             onBack={() => setStep("installers")}
+            onReset={reset}
           />
-        )}
-
-        {step === "chat" && result && caseId && (
-          <ChatDashboard result={result} caseId={caseId} onReset={reset} />
         )}
       </section>
 

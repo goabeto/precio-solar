@@ -96,7 +96,7 @@ const es: Record<string, string> = {
   "calc.title": "Calcula tu precio solar",
   "calc.phone": "Tu numero de WhatsApp",
   "calc.phonePlaceholder": "612 345 678",
-  "calc.phoneDisclaimer": "Para verificar que eres una persona real y evitar bots. Cada calculo tiene un coste: queremos que los arboles no se talen en vano. Sin llamadas comerciales. No compartimos tu numero con nadie. Puedes solicitar su eliminacion en cualquier momento.",
+  "calc.phoneDisclaimer": "Para verificar que eres una persona real y evitar bots. Sin llamadas comerciales. No compartimos tu numero con nadie. Puedes solicitar su eliminacion en cualquier momento.",
   "calc.errorPhone": "Introduce un numero de movil espanol valido (empieza por 6 o 7)",
   "calc.postalCode": "Codigo postal",
   "calc.postalCodePlaceholder": "Ej: 28001",

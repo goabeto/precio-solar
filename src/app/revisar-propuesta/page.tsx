@@ -395,7 +395,28 @@ export default function RevisarPropuestaPage() {
               <div className="bg-white/10 backdrop-blur-xl p-1 rounded-2xl shadow-2xl relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/0 pointer-events-none rounded-2xl" />
                 <div className="relative z-10 bg-white rounded-xl p-4 sm:p-5 space-y-4">
-                  <h3 className="text-base font-heading font-extrabold text-foreground text-center">Analiza tu propuesta</h3>
+                  <h3 className="text-base font-heading font-extrabold text-foreground text-center mb-1">Analiza tu propuesta</h3>
+
+        {/* PRIMARY: File upload */}
+        <div className="bg-primary/5 border-2 border-primary/20 rounded-xl p-4 text-center">
+          <p className="text-sm font-heading font-extrabold text-foreground mb-1">Sube tu presupuesto</p>
+          <p className="text-xs text-muted-foreground mb-3">Foto, PDF o captura de pantalla. Extraemos los datos automaticamente.</p>
+          <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold cursor-pointer hover:bg-primary/90 transition-colors shadow-ambient">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" /></svg>
+            Subir o hacer foto
+            <input type="file" accept="image/*,.pdf" capture="environment" className="hidden" onChange={(e) => { if (e.target.files) setUploadedFiles(Array.from(e.target.files)); }} />
+          </label>
+          {uploadedFiles.length > 0 && (
+            <p className="text-xs text-primary font-medium mt-2">{uploadedFiles.map((f) => f.name).join(", ")}</p>
+          )}
+        </div>
+
+        <div className="flex items-center gap-3 my-1">
+          <div className="flex-1 h-px bg-border" />
+          <span className="text-xs text-muted-foreground">o introduce los datos manualmente</span>
+          <div className="flex-1 h-px bg-border" />
+        </div>
+
         {/* Required fields */}
         <div>
           <label className="block text-xs font-medium text-foreground mb-1">
@@ -570,30 +591,6 @@ export default function RevisarPropuestaPage() {
             {error}
           </div>
         )}
-
-        {/* File/Photo upload */}
-        <div className="border-2 border-dashed border-border rounded-xl p-4 text-center">
-          <p className="text-xs font-semibold text-foreground mb-1">Sube tu presupuesto (opcional)</p>
-          <p className="text-xs text-muted-foreground mb-3">Foto, PDF o captura de pantalla. Extraemos los datos por ti.</p>
-          <label className="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-lg text-sm font-medium text-foreground cursor-pointer hover:bg-surface-container-high transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" /></svg>
-            Seleccionar archivo
-            <input
-              type="file"
-              accept="image/*,.pdf"
-              multiple
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files) setUploadedFiles(Array.from(e.target.files));
-              }}
-            />
-          </label>
-          {uploadedFiles.length > 0 && (
-            <div className="mt-2 text-xs text-primary font-medium">
-              {uploadedFiles.map((f) => f.name).join(", ")}
-            </div>
-          )}
-        </div>
 
         {/* Submit */}
         <button

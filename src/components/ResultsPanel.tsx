@@ -8,10 +8,11 @@ import { formatEuro, formatNumber } from "@/i18n/formatters";
 interface ResultsPanelProps {
   result: CalculationResult;
   onNext: () => void;
+  onSkipFinancing?: () => void;
   onReset: () => void;
 }
 
-export default function ResultsPanel({ result, onNext, onReset }: ResultsPanelProps) {
+export default function ResultsPanel({ result, onNext, onSkipFinancing, onReset }: ResultsPanelProps) {
   const { t, locale } = useTranslation();
   const { system, pricing, savings, financing, location } = result;
 
@@ -176,20 +177,30 @@ export default function ResultsPanel({ result, onNext, onReset }: ResultsPanelPr
         )}
       </div>
 
-      {/* CTA */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {/* CTA — visible without scrolling */}
+      <div className="flex flex-col gap-3">
         <button
           onClick={onNext}
-          className="flex-1 bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold hover:bg-primary/90 transition-colors"
+          className="w-full bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold hover:bg-primary/90 transition-colors shadow-ambient"
         >
           {t("results.compareFinancing")}
         </button>
-        <button
-          onClick={onReset}
-          className="px-6 py-3.5 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
-        >
-          {t("results.recalculate")}
-        </button>
+        <div className="flex gap-3">
+          {onSkipFinancing && (
+            <button
+              onClick={onSkipFinancing}
+              className="flex-1 py-3 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+            >
+              Pago al contado &mdash; ir a instaladores
+            </button>
+          )}
+          <button
+            onClick={onReset}
+            className="px-6 py-3 rounded-xl text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {t("results.recalculate")}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ export default function FinancingStep({ result, onNext, onSkip, onBack }: Financ
   const { t } = useTranslation();
   const loans = result.financing.allProducts || [];
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showAllLoans, setShowAllLoans] = useState(false);
 
   const handleToggle = useCallback((loanId: string) => {
     setSelectedIds((prev) => {
@@ -48,9 +49,9 @@ export default function FinancingStep({ result, onNext, onSkip, onBack }: Financ
         </p>
       </div>
 
-      {/* Financing comparison with selection */}
+      {/* Financing comparison with selection — show 4 by default */}
       <FinancingComparison
-        loans={loans}
+        loans={showAllLoans ? loans : loans.slice(0, 4)}
         netCost={result.pricing.netCost}
         subscriptionMonthly={result.financing.subscription.monthly}
         showCashAndSubscription
@@ -59,6 +60,14 @@ export default function FinancingStep({ result, onNext, onSkip, onBack }: Financ
         onToggle={handleToggle}
         maxSelections={MAX_SELECTIONS}
       />
+      {!showAllLoans && loans.length > 4 && (
+        <button
+          onClick={() => setShowAllLoans(true)}
+          className="w-full py-3 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+        >
+          Ver {loans.length - 4} opciones mas &darr;
+        </button>
+      )}
 
       {/* CTA */}
       <div className="flex flex-col sm:flex-row gap-3">
