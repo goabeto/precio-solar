@@ -396,7 +396,7 @@ export default function InstallerResults({
           </div>
           <div>
             <p className="font-heading font-extrabold text-sm text-foreground mb-1">Tu privacidad es nuestra prioridad</p>
-            <p className="text-xs text-muted-foreground leading-relaxed">Nosotros contactamos al instalador por ti via WhatsApp, protegiendo tu numero y datos personales. Sin llamadas comerciales. Recomendamos empezar con un instalador &mdash; cuando tengas una opinion, puedes contactar con otro.</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">Nosotros contactamos al instalador por ti, manteniendo tu privacidad mientras gestionamos la comunicacion. Sin llamadas comerciales intensivas ni procesos de venta agresivos. Respondemos tus dudas y preservamos tus contactos. Recomendamos empezar con un instalador &mdash; cuando tengas una decision u opinion, puedes contactar con otro.</p>
           </div>
         </div>
       </div>

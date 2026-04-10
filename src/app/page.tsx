@@ -81,7 +81,7 @@ export default function HomePage() {
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/80 text-sm font-medium mb-6">
                 <span className="w-2 h-2 rounded-full bg-[#f5a623] animate-pulse" />
-                {t("home.badgeFree")} &middot; {t("home.badge2Min")} &middot; {t("home.badgeNoCommitment")}
+                {t("home.badgeFree")} &middot; {t("home.badge2Min")} &middot; Sin compromiso ni llamadas comerciales
               </div>
 
               <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
@@ -277,6 +277,37 @@ export default function HomePage() {
               </a>
             </div>
           </div>
+
+          {/* ── Visual Journey Flow ─────────────────────────────── */}
+          <section className="py-12 px-4 sm:px-6 bg-surface-container-low">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-foreground text-center mb-2">Tu camino solar</h2>
+              <p className="text-sm text-muted-foreground text-center mb-8">Del codigo postal a la instalacion, paso a paso</p>
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-0">
+                {[
+                  { num: "1", label: "Calcula", icon: "&#9728;&#65039;" },
+                  { num: "2", label: "Resultados", icon: "&#128200;" },
+                  { num: "3", label: "Financiacion", icon: "&#128176;" },
+                  { num: "4", label: "Instaladores", icon: "&#128736;" },
+                  { num: "5", label: "Propuesta", icon: "&#128203;" },
+                  { num: "6", label: "Contacto", icon: "&#128172;" },
+                  { num: "7", label: "Instalacion", icon: "&#9889;" },
+                ].map((step, i) => (
+                  <div key={step.num} className="flex items-center">
+                    <div className="flex flex-col items-center w-16 sm:w-20">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-ambient flex items-center justify-center text-lg sm:text-xl mb-1.5">
+                        <span dangerouslySetInnerHTML={{ __html: step.icon }} />
+                      </div>
+                      <span className="text-[10px] sm:text-xs font-semibold text-foreground text-center leading-tight">{step.label}</span>
+                    </div>
+                    {i < 6 && (
+                      <div className="w-4 sm:w-8 h-0.5 bg-primary/30 mx-0.5 sm:mx-1 mt-[-14px]" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
           {/* ── City Grid ────────────────────────────────────────── */}
           <section className="py-16 px-4 sm:px-6">

@@ -80,6 +80,7 @@ export default function RevisarPropuestaPage() {
   const [financingTae, setFinancingTae] = useState("");
   const [financingMonthly, setFinancingMonthly] = useState("");
   const [financingTermMonths, setFinancingTermMonths] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ReviewResult | null>(null);
@@ -569,6 +570,30 @@ export default function RevisarPropuestaPage() {
             {error}
           </div>
         )}
+
+        {/* File/Photo upload */}
+        <div className="border-2 border-dashed border-border rounded-xl p-4 text-center">
+          <p className="text-xs font-semibold text-foreground mb-1">Sube tu presupuesto (opcional)</p>
+          <p className="text-xs text-muted-foreground mb-3">Foto, PDF o captura de pantalla. Extraemos los datos por ti.</p>
+          <label className="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-lg text-sm font-medium text-foreground cursor-pointer hover:bg-surface-container-high transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" /></svg>
+            Seleccionar archivo
+            <input
+              type="file"
+              accept="image/*,.pdf"
+              multiple
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files) setUploadedFiles(Array.from(e.target.files));
+              }}
+            />
+          </label>
+          {uploadedFiles.length > 0 && (
+            <div className="mt-2 text-xs text-primary font-medium">
+              {uploadedFiles.map((f) => f.name).join(", ")}
+            </div>
+          )}
+        </div>
 
         {/* Submit */}
         <button
