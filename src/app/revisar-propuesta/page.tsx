@@ -350,7 +350,7 @@ export default function RevisarPropuestaPage() {
         <div className="max-w-6xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/80 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-[#f5a623] animate-pulse" />
-            Analisis independiente &middot; Datos reales de mercado
+            Unico en Espana &middot; Analisis independiente &middot; Datos reales de mercado
           </div>
           <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
             {/* Left — Context */}
@@ -362,7 +362,7 @@ export default function RevisarPropuestaPage() {
                 {t("review.subtitle")}
               </p>
               <p className="text-white/60 text-sm max-w-xl mb-8 leading-relaxed">
-                Introduce los datos de tu presupuesto y te diremos si el precio es competitivo, si hay subvenciones que no te han incluido, y como se comparan las condiciones de financiacion con el mercado.
+                No conocemos otra herramienta en Espana que haga esto. Introduce los datos de tu presupuesto (o sube una foto) y te diremos si el precio es competitivo, si hay subvenciones que no te han incluido, y como se comparan las condiciones de financiacion con el mercado.
               </p>
               <div className="flex flex-wrap items-center gap-4 mb-8">
                 <a href="/" className="text-white/70 hover:text-white font-medium transition-colors text-sm underline underline-offset-4 decoration-white/30 hover:decoration-white/60">
