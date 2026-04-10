@@ -70,8 +70,10 @@ function getPartnerName(region: string): string {
 }
 
 function isPartnerInstaller(installer: InstallerDetail, region: string): boolean {
-  const partner = getPartnerName(region);
-  return installer.name.toLowerCase().includes(partner.toLowerCase());
+  const partner = getPartnerName(region).toLowerCase();
+  const name = installer.name.toLowerCase();
+  // Match partial — DB names often include "| Empresa instaladora..." suffix
+  return name.includes(partner) || name.startsWith(partner);
 }
 
 interface InstallerResultsProps {
@@ -479,7 +481,9 @@ export default function InstallerResults({
         >
           {installers.length === 0
             ? t("installers.requestContact")
-            : t("installers.sendRequest", { count: selected.size })}
+            : selected.size > 0
+            ? t("installers.sendRequest", { count: selected.size })
+            : "Selecciona un instalador para continuar"}
         </button>
         <button
           onClick={onBack}

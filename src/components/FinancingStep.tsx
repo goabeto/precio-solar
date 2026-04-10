@@ -45,7 +45,8 @@ export default function FinancingStep({ result, onNext, onSkip, onBack }: Financ
           {t("financing.title")}
         </h2>
         <p className="text-muted-foreground mt-1">
-          {t("financing.subtitle", { count: loans.length })}
+          {t("financing.subtitle", { count: showAllLoans ? loans.length : Math.min(4, loans.length) })}
+          {!showAllLoans && loans.length > 4 && ` — compara y elige la que mejor se adapta`}
         </p>
       </div>
 
