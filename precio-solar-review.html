@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precio Solar &mdash; Project Status</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f8f9fb;
+    --bg3: #f1f3f7;
+    --accent: #16a34a;
+    --accent-light: #dcfce7;
+    --amber: #d97706;
+    --amber-light: #fef3c7;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --gray: #64748b;
+    --gray-light: #e2e8f0;
+    --text: #0f172a;
+    --text2: #475569;
+    --text3: #94a3b8;
+    --border: #e2e8f0;
+    --radius: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  a { color:var(--accent); text-decoration:none; }
+
+  .container { max-width:960px; margin:0 auto; padding:0 32px; }
+
+  /* -- HEADER ----------------------------------------- */
+  .header { padding:40px 32px 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; max-width:960px; margin:0 auto; }
+  .header-left { display:flex; align-items:center; gap:16px; }
+  .logo-dot { width:10px; height:10px; border-radius:50%; background:var(--accent); }
+  .header h1 { font-size:22px; font-weight:700; letter-spacing:-0.5px; }
+  .header-right { text-align:right; }
+  .header-date { font-size:13px; color:var(--text3); }
+  .header-tag { display:inline-block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:100px; margin-top:4px; }
+
+  /* -- SECTION ---------------------------------------- */
+  .section { padding:40px 0; }
+  .section + .section { border-top:1px solid var(--border); }
+  .section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--accent); margin-bottom:8px; }
+  .section h2 { font-size:24px; font-weight:700; letter-spacing:-0.5px; margin-bottom:6px; }
+  .section .lead { font-size:15px; color:var(--text2); margin-bottom:24px; max-width:680px; }
+
+  /* -- OVERVIEW GRID ---------------------------------- */
+  .overview { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:32px; }
+  .ov-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; }
+  .ov-card h3 { font-size:13px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .ov-card .val { font-size:20px; font-weight:700; color:var(--text); }
+  .ov-card .sub { font-size:13px; color:var(--text2); margin-top:2px; }
+
+  /* -- PAGE SHOWCASE ---------------------------------- */
+  .showcase { margin-bottom:32px; }
+  .showcase-item { margin-bottom:32px; display:grid; grid-template-columns:1fr 280px; gap:28px; align-items:start; padding-bottom:32px; border-bottom:1px solid var(--border); }
+  .showcase-item:last-child { border-bottom:none; padding-bottom:0; }
+  .showcase-header { display:flex; align-items:baseline; gap:12px; margin-bottom:10px; }
+  .showcase-header h3 { font-size:17px; font-weight:700; }
+  .showcase-route { font-size:12px; font-family:'Consolas','Courier New',monospace; color:var(--text3); background:var(--bg3); padding:2px 8px; border-radius:4px; }
+  .showcase-desc { font-size:13px; color:var(--text2); margin-bottom:14px; line-height:1.6; }
+  .showcase-status { margin-top:0; }
+  .showcase-status h4 { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--accent); margin-bottom:8px; }
+  .showcase-status ul { list-style:none; }
+  .showcase-status li { font-size:12px; color:var(--text2); padding:5px 0 5px 16px; position:relative; line-height:1.5; }
+  .showcase-status li::before { content:'\2713'; position:absolute; left:0; top:5px; font-weight:700; color:var(--accent); font-size:12px; }
+  .showcase-status li.pending::before { content:'\25CB'; color:var(--amber); }
+  .showcase-img { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+  .showcase-img img { width:100%; display:block; max-height:500px; object-fit:cover; object-position:top; }
+  .showcase-imgs { display:flex; flex-direction:column; gap:12px; }
+
+  /* -- PROVIDER TABLES -------------------------------- */
+  .prov-table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:24px; }
+  .prov-table th { text-align:left; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text3); padding:8px 12px; border-bottom:2px solid var(--border); }
+  .prov-table td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .prov-table tr:last-child td { border-bottom:none; }
+  .prov-table .prov-name { font-weight:600; }
+
+  /* -- DATA SOURCES ----------------------------------- */
+  .source-table { width:100%; border-collapse:collapse; font-size:14px; }
+  .source-table th { text-align:left; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text3); padding:8px 12px; border-bottom:2px solid var(--border); }
+  .source-table td { padding:12px; border-bottom:1px solid var(--border); vertical-align:top; }
+  .source-table tr:last-child td { border-bottom:none; }
+  .status-dot { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; }
+  .status-dot::before { content:''; width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .status-dot.green::before { background:var(--accent); }
+  .status-dot.yellow::before { background:var(--amber); }
+  .status-dot.gray::before { background:var(--text3); }
+  .source-name { font-weight:600; }
+
+  /* -- ECOSYSTEM GRID --------------------------------- */
+  .eco-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:24px; }
+  .eco-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; }
+  .eco-card.done { border-left:3px solid var(--accent); }
+  .eco-card.gap { border-left:3px solid var(--red); }
+  .eco-card h4 { font-size:13px; font-weight:700; margin-bottom:3px; }
+  .eco-card p { font-size:12px; color:var(--text2); line-height:1.5; }
+  .eco-badge { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; border-radius:100px; margin-bottom:8px; }
+  .eco-badge.ready { color:var(--accent); background:var(--accent-light); }
+  .eco-badge.missing { color:var(--red); background:var(--red-light); }
+
+  /* -- DECISIONS -------------------------------------- */
+  .disc-list { display:flex; flex-direction:column; gap:16px; }
+  .disc-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; display:flex; gap:16px; }
+  .disc-num { width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; border-radius:8px; flex-shrink:0; }
+  .disc-num.decided { background:var(--accent-light); color:var(--accent); }
+  .disc-num.open { background:var(--amber-light); color:var(--amber); }
+  .disc-body h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
+  .disc-body p { font-size:13px; color:var(--text2); }
+  .disc-tag { display:inline-block; margin-top:8px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; border-radius:100px; }
+  .disc-tag.decided { color:var(--accent); background:var(--accent-light); }
+  .disc-tag.open { color:var(--amber); background:var(--amber-light); }
+
+  /* -- NEXT STEPS ------------------------------------- */
+  .paths { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .path { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+  .path-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; }
+  .path-label.a { color:var(--accent); }
+  .path-label.b { color:var(--amber); }
+  .path-label.c { color:#7c3aed; }
+  .path h3 { font-size:16px; font-weight:700; margin-bottom:6px; }
+  .path p { font-size:13px; color:var(--text2); margin-bottom:14px; }
+  .path ul { list-style:none; }
+  .path ul li { font-size:13px; color:var(--text2); padding:5px 0; border-top:1px solid var(--border); padding-left:14px; position:relative; }
+  .path ul li::before { content:''; position:absolute; left:0; top:13px; width:5px; height:5px; border-radius:50%; }
+  .path.a ul li::before { background:var(--accent); }
+  .path.b ul li::before { background:var(--amber); }
+  .path.c ul li::before { background:#7c3aed; }
+
+  /* -- STATS ------------------------------------------ */
+  .stats { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-top:32px; }
+  .stat { text-align:center; padding:16px 8px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); }
+  .stat-num { font-size:24px; font-weight:800; color:var(--accent); }
+  .stat-label { font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+
+  /* -- FOOTER ----------------------------------------- */
+  .footer { text-align:center; padding:32px; color:var(--text3); font-size:12px; border-top:1px solid var(--border); margin-top:16px; }
+
+  @media print {
+    .section { page-break-inside:avoid; }
+    .showcase-item { page-break-inside:avoid; }
+    body { font-size:12px; }
+  }
+  @media (max-width:700px) {
+    .overview { grid-template-columns:1fr; }
+    .showcase-item { grid-template-columns:1fr; }
+    .showcase-img { max-width:320px; }
+    .paths { grid-template-columns:1fr; }
+    .stats { grid-template-columns:repeat(3,1fr); }
+    .header { flex-direction:column; align-items:flex-start; gap:12px; }
+    .eco-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+<div class="header">
+  <div class="header-left">
+    <img src="public/logo.png" alt="Precio Solar" style="height:32px;width:auto;">
+    <h1>Precio Solar &mdash; Project Status</h1>
+  </div>
+  <div class="header-right">
+    <div class="header-date">April 10, 2026</div>
+    <div class="header-tag">Living Status Page</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- =====================================================
+     1. OVERVIEW
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">Overview</div>
+  <h2>What Is Built</h2>
+  <p class="lead">An independent solar price comparison platform for the Spanish market. Users enter their phone number, postal code, and electricity bill, and get an instant estimate with pricing, subsidies, financing options, and local installers &mdash; <strong>no commitment or sales calls required</strong>. Spanish phone validation with WhatsApp framing gates every calculation.</p>
+
+  <div class="overview">
+    <div class="ov-card">
+      <h3>Live URL</h3>
+      <div class="val"><a href="https://precio-solar.vercel.app" target="_blank">precio-solar.vercel.app</a></div>
+      <div class="sub">Deployed on Vercel &middot; Next.js 15 &middot; React 19</div>
+    </div>
+    <div class="ov-card">
+      <h3>Status</h3>
+      <div class="val">Functional MVP</div>
+      <div class="sub">6 tools &middot; 7-step flow with qualification form &middot; Bilingual (ES/EN)</div>
+    </div>
+    <div class="ov-card">
+      <h3>Data Coverage</h3>
+      <div class="val">All of Spain</div>
+      <div class="sub">17 regions &middot; 52 provinces &middot; PVGIS irradiation &middot; 3 partner installers</div>
+    </div>
+    <div class="ov-card">
+      <h3>Repo</h3>
+      <div class="val"><a href="https://github.com/goabeto/precio-solar" target="_blank">goabeto/precio-solar</a></div>
+      <div class="sub">Standalone repo &middot; Vendored shared types &middot; Auto-deploys on Vercel</div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:var(--text2);margin-top:8px;"><strong>Why it matters:</strong> Solar clients want to see price estimations upfront &mdash; market opacity is a real pain point. This platform gathers market information and customers&rsquo; existing proposals, qualifying leads through a structured form (and potentially a chatbot later) before handing them to installers. A great addition to the directories and tuenergiaverde projects, which don&rsquo;t cover pricing &mdash; an important part of the purchase journey.</p>
+  <p style="font-size:13px;color:var(--text2);margin-top:6px;"><strong>Ecosystem:</strong> Standalone repo (<code>goabeto/precio-solar</code>) with vendored types from <code>abeto-directories</code>. Connects to the same Supabase DB as tuenergiaverde.es. Dedup utility, subsidies API client, and SEO JSON-LD integrated. Luminous Architect design system (warm amber variant). Cross-links to tuenergiaverde.es in footer and installer cards.</p>
+  <p style="font-size:13px;color:var(--text2);margin-top:6px;"><strong>Design:</strong> Luminous Architect system shared with tuenergiaverde.es &mdash; Plus Jakarta Sans 800 headings, tonal surfaces, glassmorphism, ambient shadows. Warm amber accent (#f5a623) distinguishes from tuenergiaverde&rsquo;s yellow (#facc15). Custom sun+checkmark logo. Each page has its own hero background image with embedded forms.</p>
+</div>
+
+<!-- =====================================================
+     2. PRODUCT -- SCREENSHOTS
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">Product</div>
+  <h2>What Users See</h2>
+  <p class="lead">Six tools and a 7-step journey, each addressing a different stage of the solar purchase process. Phone validation gates entry. Partner installers surface as &ldquo;Top Pick.&rdquo; Every proposal is stored for market intelligence.</p>
+
+  <div class="showcase">
+    <!-- HOME / CALCULATOR -->
+    <div class="showcase-item">
+      <div class="showcase-text">
+        <div class="showcase-header">
+          <h3>1. Solar Calculator</h3>
+          <span class="showcase-route">/</span>
+        </div>
+        <p class="showcase-desc">The main entry point. User enters Spanish mobile phone number (required &mdash; WhatsApp framing: &ldquo;verify you&rsquo;re human, avoid bots, each calculation has a cost to the planet&rdquo;), postal code, and monthly electricity bill. The system geocodes their location, queries PVGIS for solar irradiation, sizes the system, calculates pricing with regional subsidies, estimates savings and payback, and shows financing options. <strong>No sales calls. Privacy guaranteed. Users can request removal.</strong></p>
+        <div class="showcase-status">
+          <h4>Built today</h4>
+          <ul>
+            <li>Spanish mobile validation (6xx/7xx, +34 prefix support)</li>
+            <li>No-sales-calls messaging (communication channel to review)</li>
+            <li>Battery toggle, bill slider (30&ndash;300), postal code input</li>
+            <li>PVGIS live irradiation + Nominatim geocoding</li>
+          </ul>
+        </div>
+      </div>
+      <div class="showcase-imgs">
+        <div class="showcase-img">
+          <img src="screenshots/rev-home.png" alt="Home page — Solar Calculator with phone validation">
+        </div>
+        <div class="showcase-img">
+          <img src="screenshots/rev-results.png" alt="Calculator results — pricing, subsidies, savings">
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCING -->
+    <div class="showcase-item">
+      <div class="showcase-text">
+        <div class="showcase-header">
+          <h3>2. Financing Comparison</h3>
+          <span class="showcase-route">step 3 in flow</span>
+        </div>
+        <p class="showcase-desc">Part of the calculator flow. Shows 4 loan products by default, expandable to all 13. Products sorted by TAE, ranging from ICO Linea Verde (2.5% government-backed) to digital lenders like Cofidis and Cetelem. All rates hardcoded with Q2 2026 data (last updated April 10). Weekly research cadence planned via scraping strategy.</p>
+        <div class="showcase-status">
+          <h4>Built today</h4>
+          <ul>
+            <li>13 loan products with Q2 2026 rates &amp; last_updated field</li>
+            <li>Show 4 by default, &ldquo;show more&rdquo; expands to all</li>
+            <li>Integrated into calculator flow (not standalone)</li>
+            <li class="pending">Scraping plan documented, automation not yet built</li>
+          </ul>
+        </div>
+      </div>
+      <div class="showcase-img">
+        <img src="screenshots/rev-financing.png" alt="Financing step — 4 products by default, expandable">
+      </div>
+    </div>
+
+    <!-- INSTALLER MATCHING -->
+    <div class="showcase-item">
+      <div class="showcase-text">
+        <div class="showcase-header">
+          <h3>3. Installer Matching</h3>
+          <span class="showcase-route">step 4 in flow</span>
+        </div>
+        <p class="showcase-desc">Shows 3 local installers by default, expandable to 10. Partner installers appear first with a &ldquo;Top Pick&rdquo; badge, mapped by region: <strong>Xolary</strong> (Madrid, Toledo, Segovia, Avila), <strong>ESR / Vira Energy</strong> (Barcelona, Valencia), <strong>SotySolar</strong> (rest of Spain). Users select up to 3 to request quotes. WhatsApp pitch: &ldquo;we contact on your behalf, preserving your privacy.&rdquo; Links to tuenergiaverde.es for more options.</p>
+        <div class="showcase-status">
+          <h4>Built today</h4>
+          <ul>
+            <li>Partner installer mapping by region with &ldquo;Top Pick&rdquo; badge</li>
+            <li>Show 3 by default, expand to 10</li>
+            <li>Partial name matching for DB variants</li>
+            <li>WhatsApp privacy pitch + tuenergiaverde link</li>
+            <li>Google ratings &amp; review counts displayed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="showcase-img">
+        <img src="screenshots/rev-installers.png" alt="Installer matching — Top Pick badges, 3 shown by default">
+      </div>
+    </div>
+
+    <!-- QUALIFICATION FORM -->
+    <div class="showcase-item">
+      <div class="showcase-text">
+        <div class="showcase-header">
+          <h3>4. &Uacute;ltimos Detalles Antes de Contactar</h3>
+          <span class="showcase-route">step 4 &mdash; Solicitar</span>
+        </div>
+        <p class="showcase-desc">The qualification step that replaces phone calls and WhatsApp back-and-forth. After the user selects installers, they fill a structured form with 7 questions: property address, ownership status, community approval, technician visit availability, timeline, existing proposals, and comments. Plus 3 consent checkboxes (privacy, contact authorization, data processing). <strong>This captures everything an installer needs to prepare a real quote &mdash; without a single call.</strong></p>
+        <p class="showcase-desc" style="margin-bottom:8px;"><strong>Why this matters:</strong> Most solar lead platforms pass a phone number and hope the installer can reach the customer. We capture structured, verified information upfront, making the lead dramatically more valuable. The installer gets a complete brief, and the customer never receives an unwanted call.</p>
+        <div class="showcase-status">
+          <h4>Built today</h4>
+          <ul>
+            <li>7-question qualification form (QualificationForm component)</li>
+            <li>3 consent checkboxes (privacy, contact, data)</li>
+            <li>All data stored to <code>solar_journey_leads</code> with full context</li>
+            <li>Email notification to team via Resend on each lead</li>
+          </ul>
+        </div>
+        <div style="margin-top:16px;">
+          <h4 style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--amber);margin-bottom:8px;">To improve next</h4>
+          <ul class="showcase-status" style="margin:0;">
+            <li class="pending">Force real address input (autocomplete or map picker, no free text)</li>
+            <li class="pending">Validate name field (first + last, no initials or single chars)</li>
+            <li class="pending">Cross-validate phone number with name (anti-fraud)</li>
+            <li class="pending">Progressive disclosure &mdash; reveal questions one by one to reduce drop-off</li>
+            <li class="pending">Pre-fill from calculator step (postal code, bill, phone already known)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="showcase-img">
+        <img src="screenshots/rev-qualification.png" alt="Qualification form — Ultimos detalles antes de contactar">
+      </div>
+    </div>
+
+    <!-- PROPOSAL REVIEW -->
+    <div class="showcase-item">
+      <div class="showcase-text">
+        <div class="showcase-header">
+          <h3>5. Proposal Review</h3>
+          <span class="showcase-route">/revisar-propuesta</span>
+        </div>
+        <p class="showcase-desc">Our most differentiated tool &mdash; no competitor does this in Spain. A user who received a quote inputs the details (or uploads a photo/file). The system scores price against market data, checks panel/inverter brands, evaluates financing terms, flags missing subsidies. Returns a rating: excellent, good, fair, or &ldquo;review recommended.&rdquo; <strong>Every submitted proposal is stored in <code>solar_journey_proposals</code> for market intelligence.</strong></p>
+        <div class="showcase-status">
+          <h4>Built today</h4>
+          <ul>
+            <li>All proposals stored to Supabase (fire-and-forget insert)</li>
+            <li>File upload with camera capture on mobile</li>
+            <li>Price + financing + equipment scoring</li>
+            <li>Best subsidy amount for region</li>
+            <li class="pending">OCR/photo analysis not yet implemented</li>
+          </ul>
+        </div>
+      </div>
+      <div class="showcase-imgs">
+        <div class="showcase-img">
+          <img src="screenshots/rev-proposal.png" alt="Proposal Review page — input form with file upload">
+        </div>
+      </div>
+    </div>
+
+    <!-- GUIDES -->
+    <div class="showcase-item">
+      <div class="showcase-text">
+        <div class="showcase-header">
+          <h3>6. Guides Hub</h3>
+          <span class="showcase-route">/guias</span>
+        </div>
+        <p class="showcase-desc">Content hub with featured guides on pricing, financing, and general solar topics. Design aligned with rest of platform. The subsidies sub-page (<code>/guias/subvenciones</code>) now redirects to tuenergiaverde.es/subvenciones &mdash; no duplication of subsidy content. Region-level guide pages kept for now.</p>
+        <div class="showcase-status">
+          <h4>Built today</h4>
+          <ul>
+            <li>Guide page rewritten with real content</li>
+            <li>/guias/subvenciones &rarr; redirect to tuenergiaverde.es</li>
+            <li>Design aligned with Luminous Architect</li>
+            <li class="pending">Further guide content to develop</li>
+          </ul>
+        </div>
+      </div>
+      <div class="showcase-img">
+        <img src="screenshots/rev-guides.png" alt="Guides Hub page — redesigned">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     3. TRACKABLE PROVIDERS
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">Price Intelligence</div>
+  <h2>Trackable Providers</h2>
+  <p class="lead">23 providers to track for price accuracy. Phase 1 (manual spreadsheet) not yet started. Phase 2 (Playwright automation + GitHub Actions) planned. Full strategy in <code>docs/scraping-plan.md</code>.</p>
+
+  <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;">Solar Calculator Providers (10) &mdash; Weekly cadence</h3>
+  <table class="prov-table">
+    <thead>
+      <tr><th>Provider</th><th>Type</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="prov-name">SotySolar</td><td>Online calculator</td><td><span class="status-dot yellow">Reference data used</span></td></tr>
+      <tr><td class="prov-name">Naturgy Solar</td><td>Online calculator</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">Solar360 (Repsol)</td><td>Online calculator</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">Octopus Energy</td><td>Landing page</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">Lumisa</td><td>Landing page</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">OptimizaTuSol</td><td>Online calculator</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">SolarPlus</td><td>Online calculator</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">Selectra Solar</td><td>Landing page</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">SMA Iberica</td><td>Landing page</td><td><span class="status-dot gray">Not started</span></td></tr>
+      <tr><td class="prov-name">AmsiSolar</td><td>Online calculator</td><td><span class="status-dot gray">Not started</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;">Loan Rate Providers (13) &mdash; Monthly cadence</h3>
+  <table class="prov-table">
+    <thead>
+      <tr><th>Provider</th><th>Type</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="prov-name">ICO Linea Verde</td><td>Government</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">CaixaBank</td><td>Bank</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">BBVA</td><td>Bank</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Santander</td><td>Bank</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Sabadell</td><td>Bank</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Kutxabank</td><td>Bank</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Bankinter</td><td>Bank</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Cofidis</td><td>Fintech</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Sofinco</td><td>Fintech</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Cetelem</td><td>Fintech</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Pontio Solar</td><td>Fintech</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Younited Credit</td><td>Fintech</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+      <tr><td class="prov-name">Fintonic</td><td>Fintech</td><td><span class="status-dot green">Hardcoded Q2 2026</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- =====================================================
+     4. OPEN DATA SOURCES
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">Data</div>
+  <h2>Open Data Sources</h2>
+  <p class="lead">Public APIs and government data that power (or could power) the platform. Two are live, four more are available for integration.</p>
+
+  <table class="source-table">
+    <thead>
+      <tr><th>Source</th><th>What It Provides</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="source-name">PVGIS (EU API)</td>
+        <td>Solar irradiation per location (kWh/kWp/year). Official EU service, free, no key required. Regional fallback built in.</td>
+        <td><span class="status-dot green">Live</span></td>
+      </tr>
+      <tr>
+        <td class="source-name">Nominatim (OSM)</td>
+        <td>Geocoding postal codes to coordinates + city + region. Free, no key. Fallback: hardcoded coords for all 52 provinces.</td>
+        <td><span class="status-dot green">Live</span></td>
+      </tr>
+      <tr>
+        <td class="source-name">Subsidies API</td>
+        <td>Real-time address-based subsidy resolution: exact IBI/ICIO bonifications by municipality. Connected to spain-subsidies-research API.</td>
+        <td><span class="status-dot green">Integrated (optional)</span></td>
+      </tr>
+      <tr>
+        <td class="source-name">Supabase DB</td>
+        <td>Reference pricing, loan products, subsidy programs, installer listings. Shared with tuenergiaverde.es.</td>
+        <td><span class="status-dot yellow">Live &mdash; needs verification</span></td>
+      </tr>
+      <tr>
+        <td class="source-name">ESIOS (REE)</td>
+        <td>Real-time electricity market prices from Red El&eacute;ctrica. Could power savings estimates with actual tariff data instead of user-reported bills.</td>
+        <td><span class="status-dot gray">Planned</span></td>
+      </tr>
+      <tr>
+        <td class="source-name">BDNS (Govt)</td>
+        <td>Base de Datos Nacional de Subvenciones. Official public subsidy database. Could auto-detect new solar subsidy programs.</td>
+        <td><span class="status-dot gray">Planned</span></td>
+      </tr>
+      <tr>
+        <td class="source-name">Catastro (Govt)</td>
+        <td>Property cadastre data including roof area, orientation, and building type. Could estimate installable surface without user input.</td>
+        <td><span class="status-dot gray">Planned</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- =====================================================
+     5. ECOSYSTEM
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">Ecosystem</div>
+  <h2>What&rsquo;s Done vs What&rsquo;s Missing</h2>
+  <p class="lead">Precio Solar was extracted from the <code>abeto-directories</code> monorepo on April 8&ndash;9. Shared infrastructure is integrated. Three gaps remain.</p>
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:14px;">Done</h3>
+  <div class="eco-grid">
+    <div class="eco-card done">
+      <span class="eco-badge ready">Done</span>
+      <h4>Standalone repo extracted</h4>
+      <p>Clean separation from monorepo. Own Vercel deployment, own package.json, auto-deploys on push.</p>
+    </div>
+    <div class="eco-card done">
+      <span class="eco-badge ready">Done</span>
+      <h4>Vendored shared types &amp; design system</h4>
+      <p>Shared types, lib utilities, subsidies API client vendored into <code>src/shared/</code>. Luminous Architect warm amber variant adopted.</p>
+    </div>
+    <div class="eco-card done">
+      <span class="eco-badge ready">Done</span>
+      <h4>Dedup on installer results</h4>
+      <p><code>dedupListings()</code> integrated into all installer queries. Merges duplicates by google_place_id, keeps highest-rated.</p>
+    </div>
+    <div class="eco-card done">
+      <span class="eco-badge ready">Done</span>
+      <h4>Ratings, reviews &amp; cross-links</h4>
+      <p>Google rating stars and review counts on installer cards. Cross-links to tuenergiaverde.es profiles in footer and cards.</p>
+    </div>
+    <div class="eco-card done">
+      <span class="eco-badge ready">Done</span>
+      <h4>SEO JSON-LD &amp; subsidies API</h4>
+      <p>Structured data generators integrated. Subsidies API client connected (optional, needs env vars).</p>
+    </div>
+    <div class="eco-card done">
+      <span class="eco-badge ready">Done</span>
+      <h4>Lead &amp; proposal storage</h4>
+      <p>Leads stored in <code>solar_journey_leads</code>, proposals in <code>solar_journey_proposals</code>. Email notifications via Resend.</p>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:14px;">Remaining Gaps</h3>
+  <div class="eco-grid">
+    <div class="eco-card gap">
+      <span class="eco-badge missing">Gap</span>
+      <h4>No listing validation badges</h4>
+      <p>The monorepo has AI-powered listing scoring (validation_status, validation_score). Precio Solar doesn&rsquo;t show quality indicators on installers yet.</p>
+    </div>
+    <div class="eco-card gap">
+      <span class="eco-badge missing">Gap</span>
+      <h4>No real-time subsidy resolution</h4>
+      <p>Users enter postal codes but we only show region-level subsidies. The subsidies API can return exact municipal IBI/ICIO bonifications. Quick win &mdash; we already geocode.</p>
+    </div>
+    <div class="eco-card gap">
+      <span class="eco-badge missing">Gap</span>
+      <h4>No mystery shopping pricing data</h4>
+      <p>Raul&rsquo;s pipeline collects real pricing from installer email responses. Could feed directly into reference pricing, replacing/validating hardcoded data.</p>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     6. DECISIONS
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">Decisions</div>
+  <h2>5 Decisions to Take Before Further Development</h2>
+  <p class="lead">Two decisions made today. Three remain open.</p>
+
+  <div class="disc-list">
+    <div class="disc-item">
+      <div class="disc-num decided">1</div>
+      <div class="disc-body">
+        <h3>Launch scope: all tools live from V1</h3>
+        <p>
+          <strong>Decision:</strong> Ship everything. Calculator + Financing + Installer Matching + Proposal Review + Guides. Full 7-step flow with qualification form. No phased rollout &mdash; the value is in the integrated journey.
+        </p>
+        <span class="disc-tag decided">Decided</span>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-num open">2</div>
+      <div class="disc-body">
+        <h3>Communication channel: WhatsApp, in-app chatbot, or form-only?</h3>
+        <p>
+          The &ldquo;Conversaciones&rdquo; step was removed from the flow for now. Several paths are possible: <strong>WhatsApp-mediated</strong> (we contact installers on the user&rsquo;s behalf), <strong>in-app chatbot</strong> (Claude-powered assistant that qualifies and routes), or <strong>form-only</strong> (the qualification form already captures everything). Each has different cost, UX, and scalability trade-offs. A direction is needed.
+        </p>
+        <span class="disc-tag open">Not decided</span>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-num decided">3</div>
+      <div class="disc-body">
+        <h3>Pricing accuracy: scraping plan documented</h3>
+        <p>
+          <strong>Decision:</strong> Three-phase strategy. 10 solar calculator providers (weekly) + 13 loan rate providers (monthly). Phase 1: manual spreadsheet. Phase 2: Playwright automation with GitHub Actions. Phase 3: Supabase historical storage + trend analysis. Additionally, every user-submitted proposal feeds market intelligence.
+        </p>
+        <span class="disc-tag decided">Decided</span>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-num open">4</div>
+      <div class="disc-body">
+        <h3>Business model: lead generation first, monetization later</h3>
+        <p>
+          The platform is built for lead capture: calculator &rarr; results &rarr; financing &rarr; installers &rarr; qualification &rarr; WhatsApp. CPL/CPA model likely. <strong>We need to decide: installer referral fees or lead sales?</strong> The answer shapes every priority after leads start coming in. For now: bring leads first.
+        </p>
+        <span class="disc-tag open">Still open</span>
+      </div>
+    </div>
+    <div class="disc-item">
+      <div class="disc-num open">5</div>
+      <div class="disc-body">
+        <h3>Domain, SEO, and go-to-market</h3>
+        <p>
+          Currently on <code>precio-solar.vercel.app</code>. No custom domain, no Google Analytics, no Search Console. Open questions: <strong>preciosolar.es</strong> vs subdomain of Tu Energia Verde? Timeline for going public? How to leverage the full pages ecosystem (directories, subsidies, calculators, blog)?
+        </p>
+        <span class="disc-tag open">Still open</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     7. NEXT STEPS -- THREE PATHS
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">Next Steps</div>
+  <h2>Three Paths Forward</h2>
+  <p class="lead">These paths can go together &mdash; they&rsquo;re not mutually exclusive. But we need a clear priority for next week.</p>
+
+  <div class="paths">
+    <div class="path a">
+      <div class="path-label a">Path A</div>
+      <h3>Go Live</h3>
+      <p>Polish what we have and launch to the public.</p>
+      <ul>
+        <li>Register custom domain (preciosolar.es?)</li>
+        <li>Google Analytics + Search Console</li>
+        <li>Meta tags, Open Graph, structured data</li>
+        <li>Mobile polish + performance audit</li>
+        <li>Security headers, cookie notice, terms</li>
+      </ul>
+    </div>
+    <div class="path b">
+      <div class="path-label b">Path B</div>
+      <h3>Data First</h3>
+      <p>Make pricing and subsidies accurate before public exposure.</p>
+      <ul>
+        <li>Start Phase 1 scraping (manual spreadsheet)</li>
+        <li>Verify Supabase DB reference pricing</li>
+        <li>Connect real-time subsidy resolution</li>
+        <li>Feed mystery shopping data into calculator</li>
+        <li>Add listing validation badges</li>
+      </ul>
+    </div>
+    <div class="path c">
+      <div class="path-label c">Path C</div>
+      <h3>Expand Product</h3>
+      <p>Add differentiating features before launch.</p>
+      <ul>
+        <li>OCR/photo analysis for proposal review</li>
+        <li>ESIOS integration (real electricity prices)</li>
+        <li>Catastro integration (roof estimation)</li>
+        <li>Installer dashboard (view &amp; respond to leads)</li>
+        <li>Claude-powered solar assistant</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     8. KEY NUMBERS
+     ===================================================== -->
+<div class="section">
+  <div class="section-label">At a Glance</div>
+  <h2>Key Numbers</h2>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Tools Built</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">13</div>
+      <div class="stat-label">Loan Products</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">17</div>
+      <div class="stat-label">Regions</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">7</div>
+      <div class="stat-label">Step Flow</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Partner Installers</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">23</div>
+      <div class="stat-label">Trackable Providers</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- container -->
+
+<div class="footer">
+  Abeto &mdash; Project Status &mdash; April 10, 2026
+</div>
+
+</body>
+</html>
