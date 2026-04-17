@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { postalCode, monthlyBill, annualKwh, includeBattery = false } = body;
+    const { phone, postalCode, monthlyBill, annualKwh, includeBattery = false } = body;
 
     if (!postalCode) {
       return NextResponse.json({ error: t("api.postalCodeRequired") }, { status: 400 });
@@ -104,6 +104,28 @@ export async function POST(req: NextRequest) {
 
     const subscriptionMonthly = Math.round((systemKwp * 45) / 12);
     const currentMonthlyBill = monthlyBill || Math.round((totalAnnualKwh * 0.24) / 12);
+
+    // Save early lead with phone for market intelligence (fire-and-forget)
+    if (phone) {
+      import("@/lib/data").then(({ saveLead }) => {
+        saveLead({
+          phone,
+          postal_code: postalCode,
+          city: geo!.city,
+          region: geo!.region,
+          monthly_bill: monthlyBill,
+          system_size_kwp: systemKwp,
+          panel_count: panelCount,
+          estimated_cost: price.avg,
+          subsidy_amount: subsidyAmount,
+          net_cost: netCost,
+          monthly_saving: savings.monthlySaving,
+          include_battery: includeBattery,
+          source: "calculator",
+          status: "new",
+        }).catch((e) => console.error("saveLead failed:", e));
+      });
+    }
 
     return NextResponse.json({
       location: {

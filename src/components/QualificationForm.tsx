@@ -29,9 +29,65 @@ export default function QualificationForm({
   const [consentShareData, setConsentShareData] = useState(false);
   const [consentTerms, setConsentTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const installerNames = selectedInstallers.map((i) => i.name).join(", ");
   const canSubmit = address && isOwner && isPrivate && timeline && consentWhatsApp && consentShareData && consentTerms;
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    try {
+      // Save to Supabase
+      const res = await fetch("/api/qualify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postalCode: result.location.postalCode,
+          city: result.location.city,
+          region: result.location.region,
+          address,
+          isOwner,
+          isPrivate,
+          allowVisit,
+          timeline,
+          hasExistingProposal,
+          comments,
+          systemSizeKwp: result.system.kwp,
+          panelCount: result.system.panelCount,
+          estimatedCost: result.pricing.estimatedCost,
+          subsidyAmount: result.pricing.subsidyAmount,
+          netCost: result.pricing.netCost,
+          monthlyBill: result.savings.currentMonthlyBill,
+          monthlySaving: result.savings.monthlySaving,
+          includeBattery: result.system.includeBattery,
+          selectedInstallers: selectedInstallers.map((i) => ({ id: i.id, name: i.name, city: i.city })),
+          consentWhatsApp,
+          consentShareData,
+          consentTerms,
+        }),
+      });
+      const data = await res.json();
+      const caseId = data.caseId || "ref-unknown";
+
+      // Open WhatsApp with pre-filled message
+      const waNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "34600000000";
+      const msg = `Hola! Soy un cliente de Precio Solar (ref ${caseId.slice(0, 8)}).\n\n` +
+        `Mi instalacion: ${result.system.kwp} kWp · ${result.location.city}\n` +
+        `Precio estimado: ${result.pricing.netCost} EUR (con subvenciones)\n` +
+        `Instalador seleccionado: ${installerNames}\n\n` +
+        `Quiero que contacteis al instalador en mi nombre. Gracias!`;
+      const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+
+      // Open in new tab
+      window.open(waUrl, "_blank");
+      setSubmitted(true);
+    } catch (e) {
+      console.error("Submit error:", e);
+      alert("Hubo un error. Por favor intenta de nuevo.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (submitted) {
     return (
@@ -218,11 +274,11 @@ export default function QualificationForm({
       {/* Actions */}
       <div className="flex flex-col sm:flex-row gap-3">
         <button
-          onClick={() => setSubmitted(true)}
-          disabled={!canSubmit}
+          onClick={handleSubmit}
+          disabled={!canSubmit || submitting}
           className="flex-1 bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-ambient"
         >
-          Enviar solicitud via WhatsApp
+          {submitting ? "Enviando..." : "Enviar solicitud via WhatsApp"}
         </button>
         <button onClick={onBack} className="px-6 py-3.5 rounded-xl border border-border text-muted-foreground hover:text-foreground transition-colors">
           Volver

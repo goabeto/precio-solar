@@ -94,6 +94,23 @@ export default function RevisarPropuestaPage() {
     setError(null);
 
     try {
+      // Upload files first (if any)
+      let fileUrls: string[] = [];
+      if (uploadedFiles.length > 0) {
+        const fd = new FormData();
+        uploadedFiles.forEach((f) => fd.append("files", f));
+        fd.append("postalCode", postalCode);
+        try {
+          const uploadRes = await fetch("/api/upload-proposal", { method: "POST", body: fd });
+          if (uploadRes.ok) {
+            const uploadData = await uploadRes.json();
+            fileUrls = uploadData.urls || [];
+          }
+        } catch {
+          // Non-blocking
+        }
+      }
+
       const res = await fetch("/api/review-proposal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -110,6 +127,7 @@ export default function RevisarPropuestaPage() {
           financingTae: financingTae ? Number(financingTae) : undefined,
           financingMonthly: financingMonthly ? Number(financingMonthly) : undefined,
           financingTermMonths: financingTermMonths ? Number(financingTermMonths) : undefined,
+          fileUrls,
         }),
       });
       const data = await res.json();

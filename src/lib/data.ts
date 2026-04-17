@@ -75,8 +75,9 @@ export interface LoanProduct {
 }
 
 // ── Hardcoded fallback loan data (used when DB tables don't exist) ──
-// Last updated: 2026-04-10 — Sources: CaixaBank.es, BBVA.es, ICO.es, provider websites
-// Next review: 2026-04-17 (weekly cadence)
+// Last updated: 2026-04-17 — Sources: CaixaBank.es, BBVA.es, ICO.es, provider websites
+// Next review: 2026-04-24 (weekly cadence)
+// ICO Linea Verde confirmed active until June 1, 2026 (asesoriasantanderasinem.com)
 const FALLBACK_PROVIDERS: Record<string, LoanProvider> = {
   caixabank: { id: "fb-caixa", slug: "caixabank", name: "CaixaBank", short_name: "CaixaBank", logo_url: null, website: "https://www.caixabank.es", provider_type: "bank", is_digital: false },
   bbva: { id: "fb-bbva", slug: "bbva", name: "BBVA", short_name: "BBVA", logo_url: null, website: "https://www.bbva.es", provider_type: "bank", is_digital: false },

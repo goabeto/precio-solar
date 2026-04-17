@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
       financingMonthly,
       financingTermMonths,
       financingTae,
+      fileUrls,
     } = body;
 
     if (!postalCode || !quotedPrice || !systemSizeKwp) {
@@ -162,6 +163,7 @@ export async function POST(req: NextRequest) {
           market_min: refPrice.min,
           market_max: refPrice.max,
           best_subsidy_amount: bestSubsidyAmount,
+          file_urls: fileUrls && fileUrls.length ? fileUrls : null,
         } as never)
         .then(({ error }) => {
           if (error) console.error("Failed to store proposal:", error.message);

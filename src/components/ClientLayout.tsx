@@ -7,6 +7,7 @@ import LocaleProvider from "@/i18n/LocaleProvider";
 import { useTranslation } from "@/i18n/useTranslation";
 import LanguageToggle from "./LanguageToggle";
 import AIChatWidget from "./AIChatWidget";
+import CookieNotice from "./CookieNotice";
 
 const SITE_NAME = "Precio Solar";
 
@@ -166,6 +167,7 @@ export default function ClientLayout({
       <main className="min-h-screen">{children}</main>
       <Footer />
       <AIChatWidget />
+      <CookieNotice />
     </LocaleProvider>
   );
 }
