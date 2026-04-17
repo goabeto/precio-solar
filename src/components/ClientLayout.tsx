@@ -25,6 +25,12 @@ function Nav() {
         </a>
         <div className="flex items-center gap-3 sm:gap-5 text-sm text-muted-foreground">
           <a
+            href="/blog"
+            className="hover:text-foreground transition-colors hidden sm:block"
+          >
+            Blog
+          </a>
+          <a
             href="/guias"
             className="hover:text-foreground transition-colors hidden sm:block"
           >
@@ -97,6 +103,14 @@ function Footer() {
                   className="hover:text-foreground transition-colors"
                 >
                   {t("footer.guides")}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/blog"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Blog
                 </a>
               </li>
             </ul>

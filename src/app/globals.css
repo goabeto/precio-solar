@@ -183,3 +183,72 @@ input[type="range"]::-moz-range-thumb {
   outline-offset: 2px;
   border-radius: var(--radius);
 }
+
+/* Blog article prose */
+.prose-solar {
+  color: var(--foreground);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose-solar h2 {
+  font-family: var(--font-heading, inherit);
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+}
+.prose-solar h3 {
+  font-family: var(--font-heading, inherit);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+.prose-solar p {
+  margin-bottom: 1rem;
+}
+.prose-solar ul,
+.prose-solar ol {
+  margin: 0.75rem 0 1.25rem 1.25rem;
+  padding-left: 0.5rem;
+}
+.prose-solar ul {
+  list-style: disc;
+}
+.prose-solar ol {
+  list-style: decimal;
+}
+.prose-solar li {
+  margin-bottom: 0.4rem;
+}
+.prose-solar strong {
+  color: var(--foreground);
+  font-weight: 700;
+}
+.prose-solar blockquote {
+  border-left: 4px solid var(--primary);
+  padding: 0.5rem 0 0.5rem 1.25rem;
+  margin: 1.25rem 0;
+  font-style: italic;
+  color: var(--muted-foreground);
+  background: var(--surface);
+  border-radius: 0 0.75rem 0.75rem 0;
+}
+.prose-solar a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-solar a:hover {
+  color: var(--primary);
+  opacity: 0.85;
+}
+.prose-solar hr {
+  margin: 2rem 0;
+  border-color: var(--border);
+}

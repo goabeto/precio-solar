@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { INTERNAL_POSTS } from "@/data/blog-posts";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://preciosolar.es";
 
@@ -51,6 +52,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${SITE_URL}/blog`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${SITE_URL}/politica-privacidad`,
       lastModified: now,
       changeFrequency: "yearly",
@@ -71,5 +78,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...regionPages];
+  const blogPages: MetadataRoute.Sitemap = INTERNAL_POSTS.map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...regionPages, ...blogPages];
 }
