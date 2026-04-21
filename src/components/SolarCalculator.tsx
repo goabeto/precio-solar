@@ -45,6 +45,7 @@ export interface CalculationResult {
     province: string;
     lat: number;
     lon: number;
+    geocodingPrecision?: "exact" | "prefix-fallback";
   };
   system: {
     kwp: number;
@@ -98,6 +99,13 @@ export default function SolarCalculator({ onResult, compact }: SolarCalculatorPr
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Spanish postal codes are 5 digits, first two = province (01-52).
+  const isValidSpanishPostalCode = (code: string): boolean => {
+    if (!/^\d{5}$/.test(code)) return false;
+    const prefix = parseInt(code.slice(0, 2), 10);
+    return prefix >= 1 && prefix <= 52;
+  };
+
   // Spanish mobile: 6xx or 7xx (9 digits), optionally with +34 prefix
   const normalizePhone = (raw: string): string | null => {
     const cleaned = raw.replace(/[\s\-().]/g, "");
@@ -116,8 +124,12 @@ export default function SolarCalculator({ onResult, compact }: SolarCalculatorPr
       setError(t("calc.errorPhone"));
       return;
     }
-    if (!postalCode || postalCode.length < 4) {
+    if (!postalCode) {
       setError(t("calc.errorPostalCode"));
+      return;
+    }
+    if (!isValidSpanishPostalCode(postalCode)) {
+      setError(t("calc.errorPostalCodeFormat"));
       return;
     }
     setLoading(true);

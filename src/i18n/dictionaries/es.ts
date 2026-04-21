@@ -107,10 +107,19 @@ const es: Record<string, string> = {
   "calc.disclaimer":
     "Calculo gratuito y sin compromiso. Basado en datos reales de mercado.",
   "calc.errorPostalCode": "Introduce tu codigo postal",
+  "calc.errorPostalCodeFormat": "Codigo postal no valido. Introduce 5 digitos de 01001 a 52999.",
   "calc.errorGeneric": "Error en el calculo",
   "calc.errorConnection": "Error de conexion. Intentalo de nuevo.",
 
+  // ── File upload ────────────────────────────────────────────────────
+  "upload.errorSize": "El archivo supera el tamano maximo de 10 MB.",
+  "upload.errorMime": "Formato no permitido. Solo PDF, PNG, JPG o WebP.",
+  "upload.limits": "PDF, PNG, JPG o WebP. Maximo 10 MB por archivo.",
+
   // ── Results ────────────────────────────────────────────────────────
+  "results.noticeHeading": "Estimacion aproximada",
+  "results.noticePvgis": "Datos de radiacion solar basados en la media regional (servicio PVGIS temporalmente no disponible).",
+  "results.noticeGeocode": "Ubicacion aproximada segun el codigo postal. Verifica la ciudad con tu instalador.",
   "results.title": "Tu instalacion solar en {{city}}",
   "results.systemSummary": "{{kwp}} kWp · {{panelCount}} paneles · {{production}} kWh/ano",
   "results.estimatedPrice": "Precio estimado",

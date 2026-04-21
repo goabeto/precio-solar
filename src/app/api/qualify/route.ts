@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
     // Save to Supabase solar_journey_cases
     const supabase = getServerSupabase();
     let caseId: string | null = null;
+    let dbError: string | null = null;
 
     if (supabase) {
       const sessionToken = `pc-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
@@ -45,9 +46,19 @@ export async function POST(req: NextRequest) {
 
       if (error) {
         console.error("createCase error:", error.message);
+        dbError = error.message;
       } else if (data) {
         caseId = (data as { id: string }).id;
       }
+    }
+
+    // If Supabase is configured but the insert failed, surface the error to the client
+    // so it can retry / show a message — don't silently pretend success.
+    if (supabase && !caseId) {
+      return NextResponse.json(
+        { success: false, error: "No pudimos guardar tu solicitud. Intentalo de nuevo en unos segundos.", detail: dbError },
+        { status: 503 }
+      );
     }
 
     // Send email notification to team (fire-and-forget)

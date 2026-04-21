@@ -19,6 +19,9 @@ export default function ResultsPanel({ result, onNext, onSkipFinancing, onReset 
   const loans = financing.allProducts || [];
   const bestLoan = loans[0] || null;
   const hasSubsidies = pricing.subsidies && pricing.subsidies.length > 0;
+  const estimateNotices: string[] = [];
+  if (!system.pvgisSource) estimateNotices.push(t("results.noticePvgis"));
+  if (location.geocodingPrecision === "prefix-fallback") estimateNotices.push(t("results.noticeGeocode"));
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -34,6 +37,16 @@ export default function ResultsPanel({ result, onNext, onSkipFinancing, onReset 
             production: formatNumber(system.annualProductionKwh, locale),
           })}
         </p>
+        {estimateNotices.length > 0 && (
+          <div className="mt-3 text-left mx-auto max-w-lg bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="text-xs text-amber-900 font-medium">{t("results.noticeHeading")}</p>
+            <ul className="text-xs text-amber-900/80 mt-1 list-disc list-inside space-y-0.5">
+              {estimateNotices.map((n) => (
+                <li key={n}>{n}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {/* Price Breakdown Card */}

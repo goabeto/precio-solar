@@ -48,9 +48,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 1. Geocode
+    // 1. Geocode — track whether we got an exact hit or fell back to the postal-prefix
+    //    centroid, so the UI can warn the user that the estimate is approximate.
     let geo = await geocodePostalCode(postalCode);
-    if (!geo) geo = geocodeFallback(postalCode);
+    let geocodingPrecision: "exact" | "prefix-fallback" = "exact";
+    if (!geo) {
+      geo = geocodeFallback(postalCode);
+      geocodingPrecision = "prefix-fallback";
+    }
     if (!geo) {
       return NextResponse.json({ error: t("api.invalidPostalCode") }, { status: 400 });
     }
@@ -135,6 +140,7 @@ export async function POST(req: NextRequest) {
         province: geo.province,
         lat: geo.lat,
         lon: geo.lon,
+        geocodingPrecision,
       },
       system: {
         kwp: systemKwp,
