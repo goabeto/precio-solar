@@ -1,0 +1,37 @@
+name: Loan rate snapshot
+
+# Weekly snapshot of solar-loan provider rates. Phase 0 — log-only by default.
+# Manual `--persist` run can be triggered via the workflow_dispatch UI.
+# See docs/loan-rate-monitoring-plan.md and task-20260421-009 (mini-team).
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Monday 06:00 UTC = 08:00 Madrid
+  workflow_dispatch:
+    inputs:
+      persist:
+        description: "Also write snapshots to loan_rate_snapshots table"
+        type: boolean
+        default: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - name: Run scrapers
+        run: |
+          if [[ "${{ inputs.persist }}" == "true" ]]; then
+            npx tsx scripts/scrape-loan-rates.ts --persist
+          else
+            npx tsx scripts/scrape-loan-rates.ts
+          fi
