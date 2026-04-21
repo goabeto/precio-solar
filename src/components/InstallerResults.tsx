@@ -54,27 +54,50 @@ export interface InstallerDetail {
   services: InstallerService[];
 }
 
-// Partner installers by region — shown as "Top Pick"
-const PARTNER_BY_REGION: Record<string, string> = {
-  "Madrid": "Xolary",
-  "Castilla-La Mancha": "Xolary",
-  "Castilla y León": "Xolary",
-  "Cataluña": "ESR",
-  "Cataluna": "ESR",
-  "Comunidad Valenciana": "ESR",
-};
+// Partner installers by user location.
+// Xolary covers specific provinces (not whole regions); ESR covers two full regions; SotySolar is the rest-of-Spain fallback.
+// Per docs/decisions.md decision 5 (first-10-leads workflow) + decision 8 (Top Pick positioning).
+const XOLARY_PROVINCES = new Set([
+  "Madrid", "Toledo", "Segovia", "Ávila", "Avila", "Guadalajara",
+]);
+const ESR_REGIONS = new Set([
+  "Cataluña", "Cataluna",
+  "Comunidad Valenciana", "Comunitat Valenciana",
+]);
 const DEFAULT_PARTNER = "SotySolar";
 
-function getPartnerName(region: string): string {
-  return PARTNER_BY_REGION[region] || DEFAULT_PARTNER;
+function getPartnerName(province: string | null | undefined, region: string | null | undefined): string {
+  if (province && XOLARY_PROVINCES.has(province)) return "Xolary";
+  if (region && ESR_REGIONS.has(region)) return "ESR";
+  return DEFAULT_PARTNER;
 }
 
-function isPartnerInstaller(installer: InstallerDetail, region: string): boolean {
-  const partner = getPartnerName(region).toLowerCase();
+function isPartnerInstaller(installer: InstallerDetail, province: string | null | undefined, region: string | null | undefined): boolean {
+  const partner = getPartnerName(province, region).toLowerCase();
   const name = installer.name.toLowerCase();
   // Match partial — DB names often include "| Empresa instaladora..." suffix
   return name.includes(partner) || name.startsWith(partner);
 }
+
+// One verbatim Google review quote per partner — most-recent at time of curation (2026-04-21).
+// Hand-picked, see [[task-20260421-002]]. Update by replacing the strings; no schema change.
+const PARTNER_QUOTES: Record<string, { text: string; reviewer: string; when: string }> = {
+  "Xolary": {
+    text: "Sin duda la mejor empresa instaladora, me decidi por las resenas tan buenas que tiene y no falla. La gente contenta es el mejor resultado de cada trabajo. Sin duda alguna el mejor equipo Luis Miguel, Diego y Ramon.",
+    reviewer: "Peter S.",
+    when: "hace 5 meses",
+  },
+  "ESR": {
+    text: "Muy buen trabajo. Muy profesionales y muy buenos acabados. Los chicos llegaron muy puntuales y nos hicieron participes de las decisiones posibles. Si hubiera un campeonato del mundo de instaladores de placas estos chicos serian los primeros.",
+    reviewer: "Irene M. (Local Guide)",
+    when: "hace 1 mes",
+  },
+  "SotySolar": {
+    text: "Vinieron Enrique, Ruben y Pablo, todo unos profesionales, la instalacion fue perfecta con recomendaciones de 10, se nota la profesionalidad y el cuidado hacia el material, todas las dudas me las aclararon, super recomendado.",
+    reviewer: "Taufik S.",
+    when: "hace 1 mes",
+  },
+};
 
 interface InstallerResultsProps {
   result: CalculationResult;
@@ -87,11 +110,13 @@ function InstallerCard({
   isSelected,
   onToggle,
   isPartner,
+  partnerQuote,
 }: {
   installer: InstallerDetail;
   isSelected: boolean;
   onToggle: () => void;
   isPartner?: boolean;
+  partnerQuote?: { text: string; reviewer: string; when: string };
 }) {
   const [expanded, setExpanded] = useState(false);
   const { t, locale } = useTranslation();
@@ -129,7 +154,7 @@ function InstallerCard({
             <div className="flex items-center gap-2">
               <h3 className="font-heading font-bold text-foreground">{installer.name}</h3>
               {isPartner && (
-                <span className="text-xs font-bold bg-accent text-accent-foreground px-2 py-0.5 rounded-full">Top Pick</span>
+                <span className="text-xs font-bold bg-accent text-accent-foreground px-2 py-0.5 rounded-full">Clientes recomiendan</span>
               )}
             </div>
             <p className="text-sm text-muted-foreground">
@@ -153,6 +178,14 @@ function InstallerCard({
                 </span>
               )}
             </div>
+
+            {/* Partner quote — social-proof snippet from Google Reviews */}
+            {isPartner && partnerQuote && (
+              <blockquote className="mt-2.5 pl-3 border-l-2 border-accent">
+                <p className="text-sm italic text-foreground leading-snug">&ldquo;{partnerQuote.text}&rdquo;</p>
+                <footer className="text-xs text-muted-foreground mt-1">— {partnerQuote.reviewer} · {partnerQuote.when}</footer>
+              </blockquote>
+            )}
 
             {/* Certifications badges */}
             {installer.certifications.length > 0 && (
@@ -430,29 +463,49 @@ export default function InstallerResults({
       ) : (
         <div className="space-y-3">
           {(() => {
-            const sorted = [...installers].sort((a, b) => {
-              const aPartner = isPartnerInstaller(a, result.location.region) ? 0 : 1;
-              const bPartner = isPartnerInstaller(b, result.location.region) ? 0 : 1;
-              return aPartner - bPartner;
-            });
-            const visible = showAll ? sorted : sorted.slice(0, 3);
+            const province = result.location.province;
+            const region = result.location.region;
+            const partnerName = getPartnerName(province, region);
+            const partnerQuote = PARTNER_QUOTES[partnerName];
+
+            // Find the partner installer (if present in the results) and the rest.
+            const partnerInstaller = installers.find((i) => isPartnerInstaller(i, province, region)) || null;
+            const others = installers.filter((i) => !partnerInstaller || i.id !== partnerInstaller.id);
+
+            // Per decision 8b: alternatives should have ratings *worse* than the partner so the
+            // Top Pick looks earned. Filter out anything rated higher than the partner; if that
+            // leaves us with fewer than 3 alternatives, fall back to all others (transparency wins).
+            const partnerRating = partnerInstaller?.google_rating ?? null;
+            const ratingFilteredOthers = partnerRating != null
+              ? others.filter((i) => (i.google_rating ?? 0) <= partnerRating)
+              : others;
+            const alternatives = ratingFilteredOthers.length >= 3 ? ratingFilteredOthers : others;
+
+            const sorted: InstallerDetail[] = partnerInstaller
+              ? [partnerInstaller, ...alternatives]
+              : alternatives;
+            const visible = showAll ? sorted : sorted.slice(0, 4); // partner + 3 alternatives by default
             return (
               <>
-                {visible.map((installer) => (
-                  <InstallerCard
-                    key={installer.id}
-                    installer={installer}
-                    isSelected={selected.has(installer.id)}
-                    onToggle={() => toggleSelect(installer.id)}
-                    isPartner={isPartnerInstaller(installer, result.location.region)}
-                  />
-                ))}
-                {!showAll && sorted.length > 3 && (
+                {visible.map((installer) => {
+                  const isPartner = !!partnerInstaller && installer.id === partnerInstaller.id;
+                  return (
+                    <InstallerCard
+                      key={installer.id}
+                      installer={installer}
+                      isSelected={selected.has(installer.id)}
+                      onToggle={() => toggleSelect(installer.id)}
+                      isPartner={isPartner}
+                      partnerQuote={isPartner ? partnerQuote : undefined}
+                    />
+                  );
+                })}
+                {!showAll && sorted.length > visible.length && (
                   <button
                     onClick={() => setShowAll(true)}
                     className="w-full py-3 rounded-xl border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
                   >
-                    Ver {sorted.length - 3} instaladores mas &darr;
+                    Ver {sorted.length - visible.length} instaladores mas &darr;
                   </button>
                 )}
               </>
