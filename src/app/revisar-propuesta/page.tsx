@@ -69,6 +69,7 @@ function ScoreBadge({ score, t }: { score: string; t: (key: string) => string })
 export default function RevisarPropuestaPage() {
   const { t, locale } = useTranslation();
   const [postalCode, setPostalCode] = useState("");
+  const [phone, setPhone] = useState("");
   const [quotedPrice, setQuotedPrice] = useState("");
   const [systemSize, setSystemSize] = useState("");
   const [panelCount, setPanelCount] = useState("");
@@ -88,6 +89,12 @@ export default function RevisarPropuestaPage() {
   const handleSubmit = async () => {
     if (!postalCode || !quotedPrice || !systemSize) {
       setError(t("review.errorRequired"));
+      return;
+    }
+    const cleanedPhone = phone.replace(/[\s\-().]/g, "");
+    const phoneOk = /^(?:\+34)?[67]\d{8}$/.test(cleanedPhone);
+    if (!phoneOk) {
+      setError("Introduce un numero de movil espanol valido (empieza por 6 o 7)");
       return;
     }
     setLoading(true);
@@ -116,6 +123,7 @@ export default function RevisarPropuestaPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           postalCode,
+          phone: cleanedPhone.startsWith("+34") ? cleanedPhone : "+34" + cleanedPhone,
           quotedPrice: Number(quotedPrice),
           systemSizeKwp: Number(systemSize),
           panelCount: panelCount ? Number(panelCount) : undefined,
@@ -461,6 +469,23 @@ export default function RevisarPropuestaPage() {
             placeholder={t("calc.postalCodePlaceholder")}
             className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
           />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-foreground mb-1">Telefono movil *</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">+34</span>
+            <input
+              type="tel"
+              inputMode="tel"
+              maxLength={12}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/[^\d+\s\-]/g, ""))}
+              placeholder="600 000 000"
+              className="w-full pl-10 pr-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:ring-2 focus:ring-ring outline-none transition"
+            />
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-1">Para enviarte el analisis. No compartimos tu numero con nadie.</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

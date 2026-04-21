@@ -37,14 +37,13 @@ export default function FinancingRequest({
   const termMonths = loanTermMonths ?? 120;
 
   const validatePhone = (value: string): boolean => {
-    if (!value) return true;
     const cleaned = value.replace(/[\s\-().]/g, "");
     return /^(?:\+34)?[67]\d{8}$/.test(cleaned);
   };
 
   const handleSubmit = async () => {
     if (!name.trim()) return;
-    if (phone && !validatePhone(phone)) {
+    if (!phone || !validatePhone(phone)) {
       setPhoneError(t("case.phoneError"));
       return;
     }
@@ -53,7 +52,7 @@ export default function FinancingRequest({
     setError(null);
 
     try {
-      const cleanedPhone = phone ? phone.replace(/[\s\-().]/g, "") : undefined;
+      const cleanedPhone = phone.replace(/[\s\-().]/g, "");
       const res = await fetch("/api/financing-leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

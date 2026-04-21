@@ -23,10 +23,24 @@ export default function LeadForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Spanish mobile: 6xx or 7xx (9 digits), optionally with +34 prefix
+  const normalizeSpanishPhone = (raw: string): string | null => {
+    const cleaned = raw.replace(/[\s\-().]/g, "");
+    if (/^\+34[67]\d{8}$/.test(cleaned)) return cleaned;
+    if (/^34[67]\d{8}$/.test(cleaned)) return "+" + cleaned;
+    if (/^[67]\d{8}$/.test(cleaned)) return "+34" + cleaned;
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !name) {
       setError("Nombre y email son obligatorios");
+      return;
+    }
+    const normalizedPhone = normalizeSpanishPhone(phone);
+    if (!normalizedPhone) {
+      setError("Introduce un numero de movil espanol valido (empieza por 6 o 7)");
       return;
     }
 
@@ -40,7 +54,7 @@ export default function LeadForm({
         body: JSON.stringify({
           name,
           email,
-          phone,
+          phone: normalizedPhone,
           postal_code: result.location.postalCode,
           city: result.location.city,
           region: result.location.region,
@@ -123,14 +137,21 @@ export default function LeadForm({
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Telefono</label>
-          <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg border border-input bg-background outline-none focus:ring-2 focus:ring-ring"
-            placeholder="600 000 000"
-          />
+          <label className="block text-sm font-medium mb-1">Telefono movil *</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">+34</span>
+            <input
+              type="tel"
+              inputMode="tel"
+              maxLength={12}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/[^\d+\s\-]/g, ""))}
+              required
+              className="w-full pl-12 pr-4 py-2.5 rounded-lg border border-input bg-background outline-none focus:ring-2 focus:ring-ring"
+              placeholder="600 000 000"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">Para que el instalador pueda contactarte. No compartimos tu numero con nadie.</p>
         </div>
 
         <div>

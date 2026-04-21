@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       postalCode,
+      phone,
       quotedPrice,
       systemSizeKwp,
       panelCount,
@@ -60,6 +61,25 @@ export async function POST(req: NextRequest) {
 
     const kwp = roundToStandardSize(systemSizeKwp);
     const euroPerKwp = Math.round(quotedPrice / kwp);
+
+    // Save lead (fire-and-forget) — phone is captured up-front in the proposal-review
+    // form as the "value-moment" gate before showing the analysis.
+    if (phone) {
+      import("@/lib/data").then(({ saveLead }) => {
+        saveLead({
+          phone,
+          postal_code: postalCode,
+          city: geo!.city,
+          region: geo!.region,
+          system_size_kwp: kwp,
+          panel_count: panelCount,
+          estimated_cost: quotedPrice,
+          include_battery: includeBattery,
+          source: "proposal-review",
+          status: "new",
+        }).catch((e) => console.error("saveLead (review) failed:", e));
+      });
+    }
 
     // Reference pricing
     const referencePricing = await getReferencePricing(includeBattery);
