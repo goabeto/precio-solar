@@ -25,19 +25,17 @@ export default function QualificationForm({
   const [hasExistingProposal, setHasExistingProposal] = useState<string>("");
   const [existingProposalFile, setExistingProposalFile] = useState<File | null>(null);
   const [comments, setComments] = useState("");
-  const [consentWhatsApp, setConsentWhatsApp] = useState(false);
   const [consentShareData, setConsentShareData] = useState(false);
   const [consentTerms, setConsentTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const installerNames = selectedInstallers.map((i) => i.name).join(", ");
-  const canSubmit = address && isOwner && isPrivate && timeline && consentWhatsApp && consentShareData && consentTerms;
+  const canSubmit = address && isOwner && isPrivate && timeline && consentShareData && consentTerms;
 
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      // Save to Supabase
       const res = await fetch("/api/qualify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -61,25 +59,15 @@ export default function QualificationForm({
           monthlySaving: result.savings.monthlySaving,
           includeBattery: result.system.includeBattery,
           selectedInstallers: selectedInstallers.map((i) => ({ id: i.id, name: i.name, city: i.city })),
-          consentWhatsApp,
           consentShareData,
           consentTerms,
         }),
       });
-      const data = await res.json();
-      const caseId = data.caseId || "ref-unknown";
-
-      // Open WhatsApp with pre-filled message
-      const waNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "34600000000";
-      const msg = `Hola! Soy un cliente de Precio Solar (ref ${caseId.slice(0, 8)}).\n\n` +
-        `Mi instalacion: ${result.system.kwp} kWp · ${result.location.city}\n` +
-        `Precio estimado: ${result.pricing.netCost} EUR (con subvenciones)\n` +
-        `Instalador seleccionado: ${installerNames}\n\n` +
-        `Quiero que contacteis al instalador en mi nombre. Gracias!`;
-      const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
-
-      // Open in new tab
-      window.open(waUrl, "_blank");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Hubo un error. Por favor intenta de nuevo.");
+        return;
+      }
       setSubmitted(true);
     } catch (e) {
       console.error("Submit error:", e);
@@ -97,7 +85,7 @@ export default function QualificationForm({
           Solicitud enviada
         </h2>
         <p className="text-muted-foreground mb-4 max-w-md mx-auto">
-          Hemos recibido tu solicitud. Contactaremos a {installerNames} en tu nombre y te enviaremos su respuesta via WhatsApp.
+          Hemos recibido tu solicitud. Contactaremos a {installerNames} en tu nombre y te haremos llegar su respuesta por email.
         </p>
         <p className="text-sm text-muted-foreground mb-8">
           Sin llamadas comerciales. Sin visitas sin tu aprobacion.
@@ -250,13 +238,6 @@ export default function QualificationForm({
         <h3 className="font-heading font-extrabold text-foreground text-sm">Permisos y consentimiento</h3>
 
         <label className="flex items-start gap-3 cursor-pointer">
-          <input type="checkbox" checked={consentWhatsApp} onChange={(e) => setConsentWhatsApp(e.target.checked)} className="mt-1 w-4 h-4 rounded border-border text-primary focus:ring-primary" />
-          <span className="text-sm text-foreground">
-            <strong>Acepto recibir comunicaciones via WhatsApp</strong> con la respuesta del instalador y actualizaciones sobre mi solicitud.
-          </span>
-        </label>
-
-        <label className="flex items-start gap-3 cursor-pointer">
           <input type="checkbox" checked={consentShareData} onChange={(e) => setConsentShareData(e.target.checked)} className="mt-1 w-4 h-4 rounded border-border text-primary focus:ring-primary" />
           <span className="text-sm text-foreground">
             <strong>Autorizo compartir mis datos con {installerNames || "el instalador seleccionado"}</strong>. Ningun instalador realizara visitas ni llamadas sin mi aprobacion previa.
@@ -278,7 +259,7 @@ export default function QualificationForm({
           disabled={!canSubmit || submitting}
           className="flex-1 bg-primary text-primary-foreground py-3.5 rounded-xl text-lg font-heading font-bold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-ambient"
         >
-          {submitting ? "Enviando..." : "Enviar solicitud via WhatsApp"}
+          {submitting ? "Enviando..." : "Enviar solicitud"}
         </button>
         <button onClick={onBack} className="px-6 py-3.5 rounded-xl border border-border text-muted-foreground hover:text-foreground transition-colors">
           Volver
