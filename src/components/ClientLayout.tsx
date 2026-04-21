@@ -180,7 +180,7 @@ export default function ClientLayout({
       <Nav />
       <main className="min-h-screen">{children}</main>
       <Footer />
-      <AIChatWidget />
+      {process.env.NEXT_PUBLIC_ELEVENLABS_ENABLED === "true" && <AIChatWidget />}
       <CookieNotice />
     </LocaleProvider>
   );

@@ -40,7 +40,8 @@ Required:
 
 Optional:
 - `SUBSIDIES_API_URL` + `SUBSIDIES_API_KEY` — real-time subsidy resolution
-- `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` — AI chat widget
+- `ELEVENLABS_API_KEY` + `ELEVENLABS_AGENT_ID` — AI chat widget (only used when `NEXT_PUBLIC_ELEVENLABS_ENABLED=true`; widget is hidden by default)
+- `NEXT_PUBLIC_ELEVENLABS_ENABLED` — set to `true` to render the voice chat widget; off by default
 - `RESEND_API_KEY` — lead notification emails
 - `NEXT_PUBLIC_UMAMI_WEBSITE_ID` — analytics
 
